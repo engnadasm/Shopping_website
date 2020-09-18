@@ -1,0 +1,96 @@
+/* Carousel Header Styles */
+@media (max-width: 600px){
+    .header-text{
+      top: 10%;
+      color: #fff;
+    }
+
+
+}
+
+@media (min-width: 600px){
+    .header-text{
+      position: absolute;
+      top: 12%;
+      left: 1.8%;
+      right: auto;
+      width: 100%;
+      color: #fff;
+    }
+}
+
+
+.header-text h2 {
+    font-size: 30px;
+}
+
+.header-text h2 span {
+  background-color: #0062cc;
+	padding: 10px;
+}
+
+.header-text h3 span {
+  display:inline-block;
+	padding: 15px;
+  color: #000;
+
+}
+
+.btn-min-block {
+    min-width: 170px;
+    line-height: 26px;
+}
+
+.btn-theme {
+    color: 'black';
+    background-color: transparent;
+    border: 2px solid #0062cc;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    font-size: 20px;
+
+}
+
+.btn-theme:hover {
+    color: #000;
+    background-color: #fff;
+    border-color: #fff;
+}
+
+/*search box css start here*/
+.search-sec{
+    padding: 2rem;
+}
+.search-slt{
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #55595c;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+.wrn-btn{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+@media (min-width: 992px){
+    .search-sec{
+        position: relative;
+        top: -114px;
+        background: rgba(26, 70, 104, 0.51);
+    }
+}
+
+@media (max-width: 992px){
+    .search-sec{
+        background: #0062cc;
+    }
+}

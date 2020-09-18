@@ -1,5 +1,5 @@
 {
-  "name": "Book_appointment_website",
+  "name": "Shopping_website",
   "version": "1.0.0",
   "description": "React_web",
   "main": "server.js",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/engnadasm/Book_appointment_website.git"
+    "url": "git+https://github.com/engnadasm/Shopping_website.git"
   },
   "author": "nada salama",
   "license": "ISC",
-  "bugs": { 
-    "url": "https://github.com/engnadasm/Book_appointment_website/issues"
+  "bugs": {
+    "url": "https://github.com/engnadasm/Shopping_website/issues"
   },
-  "homepage": "https://github.com/engnadasm/Book_appointment_website#readme",
+  "homepage": "https://github.com/engnadasm/Shopping_website#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "concurrently": "^5.3.0",
