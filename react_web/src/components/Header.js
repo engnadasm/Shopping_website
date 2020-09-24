@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import './Header.css';
-import 'bootstrap/dist/js/bootstrap.min.js'
-import history from '../history';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
+import history from './../history';
 
 function Header() {
   const animatedComponents = makeAnimated();
@@ -68,8 +67,9 @@ function Header() {
   const handleChange2 = (selectedOption2) => {
     newSelOp2(selectedOption2.value)
   }
-
-
+const search = () => {
+  history.push('/SearchOut')
+}
   return (
     <header id="header">
         <section>
@@ -93,7 +93,7 @@ function Header() {
                 </div>
                 <section className="search-sec">
     <div className="container">
-        <form action="#" method="post" novalidate="novalidate">
+        <form action="#" method="post" noValidate="noValidate">
             <div className="row">
                 <div className="col-lg-12">
                     <div className="row">
@@ -126,7 +126,7 @@ function Header() {
 
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <button type="button" className="btn btn-danger wrn-btn">Search</button>
+                            <button type="button" className="btn btn-danger wrn-btn"onClick={search}>Search</button>
                         </div>
                     </div>
                 </div>
@@ -150,7 +150,7 @@ function Header() {
                 </div>
                 <section className="search-sec">
     <div className="container">
-        <form action="#" method="post" novalidate="novalidate">
+        <form action="#" method="post" noValidate="noValidate">
             <div className="row">
                 <div className="col-lg-12">
                 <div className="row">
@@ -183,7 +183,7 @@ function Header() {
 
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-12 p-0">
-                        <button type="button" className="btn btn-danger wrn-btn">Search</button>
+                        <button type="button" className="btn btn-danger wrn-btn" onClick={search}>Search</button>
                     </div>
                 </div>
                 </div>
@@ -207,7 +207,7 @@ function Header() {
                 </div>
                 <section className="search-sec">
                 <div className="container">
-                <form action="#" method="post" novalidate="novalidate">
+                <form action="#" method="post" noValidate="noValidate">
                 <div className="row">
                     <div className="col-lg-4 col-md-4 col-sm-12 p-0">
                     <Select
@@ -238,7 +238,7 @@ function Header() {
 
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-12 p-0">
-                        <button type="button" className="btn btn-danger wrn-btn">Search</button>
+                    <button type="button" className="btn btn-danger wrn-btn" onClick={search}>Search</button>
                     </div>
                 </div>
                 </form>

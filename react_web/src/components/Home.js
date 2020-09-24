@@ -1,32 +1,25 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import ShoppingList from './ShoppingList';
-import ItemModal from './ItemModal';
 import Header from './Header';
 import Contact from './Contact';
-import Footer from './Footer';
-import { Container } from 'reactstrap';
+import Service from './Service'
 
 import { Scrollspy } from 'reactstrap-scrollspy'
 
+class Home extends Component {
 
-function Home() {
+  render(){
   return (
-<div>
     <Scrollspy
      names={['navbar','header', 'shoppingList', 'contact', null]}
      homeIndex={1}
    >
         <Header />
-        <Container>
-          <ItemModal />
-          <ShoppingList />
-        </Container>
+        <Service/>
         <Contact />
      </Scrollspy>
-     </div>
 
    )
  }
+}
 
  export default Home

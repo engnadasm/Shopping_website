@@ -49,7 +49,6 @@ class Login extends Component {
         this.setState({fields});
     };
   render(){
-    const { login } = this.state;
 
     return (
 <Modal  id="LoginPopup" tabIndex="-1" aria-labelledby="LoginPopupTitle"  size="lg"

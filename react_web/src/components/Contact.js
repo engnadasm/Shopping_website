@@ -5,8 +5,7 @@ import './Contact.css';
 function Contact() {
 
   return (
-    <section id="contact">
-      <div className="container contact-form">
+      <div className=" contact-form"  id="contact">
               <div className="contact-image">
                   <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
               </div>
@@ -37,7 +36,6 @@ function Contact() {
               </form>
   </div>
 
-    </section>
   )
 }
 
