@@ -1,27 +1,34 @@
 const express = require('express');//for server
 const mongoose = require('mongoose');//we use it as database
-const bodyParser = require('body-parser');//take request and get date from the body
 const items = require('./routes/api/items');
+const users = require('./routes/api/users');
+const messages = require('./routes/api/messages');
+const auth = require('./routes/api/auth');
+
+const config = require('config');
+
 const path = require('path');
 
 const app = express();
 
 //bodyParser Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 
 // DB config
-const db = require('./config/keys').mongoURI;
+const db = config.get('mongoURI');
 
 // connect to mongodb
 
 mongoose.connect(db, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
     useCreateIndex: true,
   }).then(console.log('mongoDB Connected.....')).catch(err =>console.log(err));
 
 //Use routes
 app.use('/api/items', items);
+app.use('/api/users', users);
+app.use('/api/messages', messages);
+app.use('/api/auth', auth);
 
 // server
 if(process.env.NODE_ENV == 'production'){

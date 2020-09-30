@@ -4,15 +4,21 @@ import { FaHome } from "react-icons/fa";
 import { FaShoppingBag } from "react-icons/fa";
 import { FaRocket } from "react-icons/fa";
 import { FaSignInAlt } from "react-icons/fa";
-import { FaSignOutAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import Logo from './img/logo.png';
 import Navbar from 'react-bootstrap/Navbar';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Logout from './auth/Logout';
 
 import { ScrollspyNavLink } from 'reactstrap-scrollspy'
 
 class AppNavbar extends Component {
+  static propTypes = {
+      auth: PropTypes.object.isRequired
+    };
+
     constructor(props) {
           super()
           this.state = {
@@ -24,15 +30,18 @@ class AppNavbar extends Component {
 
 
      render() {
+       const { isAuthenticated, user } = this.props.auth;
+
        var activeClass = {Login: "visible", Logout:"visible "}
-           if(this.props.isLogIn ){
+           if(isAuthenticated  ){
                activeClass = {Login: "d-none", Logout:"visible "}
            }else
            {
              activeClass = {Login: "visible", Logout:"d-none"}
            }
   return (
-    <ReactstrapNavbar expand="md" fixed="top" className="navbar-dark bg-dark">
+
+    <ReactstrapNavbar expand="sm" fixed="top" className="navbar-dark bg-dark mb-5">
         <Navbar.Brand href="/#home" >
 <img className="pl-3" width="200" alt="logo" height= "80" src={Logo}></img>
 </Navbar.Brand>
@@ -69,9 +78,7 @@ class AppNavbar extends Component {
           </ScrollspyNavLink>
           </NavItem>
           <NavItem className={activeClass.Logout}>
-          <ScrollspyNavLink name="LogOut">
-            <NavLink href="/LogOut"><FaSignOutAlt className="pb-1" size="25"/>LogOut</NavLink>
-          </ScrollspyNavLink>
+            <Logout/>
           </NavItem>
           <NavItem className={activeClass.Login}>
           <ScrollspyNavLink name="LoginPopup">
@@ -88,5 +95,11 @@ class AppNavbar extends Component {
     </ReactstrapNavbar>
   )}
 }
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-export default AppNavbar
+export default connect(
+  mapStateToProps,
+  null
+)(AppNavbar);

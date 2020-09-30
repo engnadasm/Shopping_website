@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import './SignUp.css';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { register } from '../actions/authActions';
+import { clearErrors } from '../actions/errorActions';
 
 class SignUp extends Component {
    constructor() {
@@ -8,11 +12,20 @@ class SignUp extends Component {
         this.state = {
             setValidated: false,
             validated: false,
-            errors:{}
+            errors:{},
+            userName: '',
+          date: '',
+          emailORphone:'',
+          password: '',
+          gender: '',
+          msg: null
+
         }
 
     }
-
+    onChange = e => {
+          this.setState({ [e.target.name]: e.target.value });
+        };
   handleSubmit = (event) => {
     let errors={}
     const formEl = event.currentTarget
@@ -35,11 +48,53 @@ class SignUp extends Component {
                 }
       }
       console.log("invalid")
+    } else {
+      event.preventDefault();
+
+      const { userName, emailORphone, password } = this.state;
+
+      // Create user object
+      const newUser = {
+        userName,
+        emailORphone,
+        password
+      };
+
+      // Attempt to register
+      this.props.register(newUser);
+    console.log("valid_1")
+
     }
     this.setState({errors: errors});
     this.setState({ validated: true });
     console.log("valid")
   };
+  static propTypes = {
+    isAuthenticated: PropTypes.bool,
+    error: PropTypes.object.isRequired,
+    register: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired
+  };
+
+  componentDidUpdate(prevProps) {
+    const { error, isAuthenticated } = this.props;
+    if (error !== prevProps.error) {
+      // Check for register error
+      if (error.id === 'REGISTER_FAIL') {
+        this.setState({ msg: error.msg.msg });
+      } else {
+        this.setState({ msg: null });
+      }
+    }
+
+    // If authenticated, close modal
+    if (this.state.modal) {
+      if (isAuthenticated) {
+        this.toggle();
+      }
+    }
+  }
+
   render(){
   	return (
   		<div className="container" style={{marginTop:"5%"}} id="signUp">
@@ -56,21 +111,27 @@ class SignUp extends Component {
   				  <form noValidate onSubmit={this.handleSubmit.bind(this)}>
   				   	<div className="form-group">
     					<label htmlFor="inputName1">User Name</label>
-   					    <input type="name" className="form-control" id="inputName1" placeholder="User Name" required></input>
+   					    <input type="name" className="form-control" id="inputName1" placeholder="User Name"
+                name="userName"
+                onChange={this.onChange}required></input>
                 <span style={{color: "red"}} className="invalid-message" id="userName1">
                 {this.state.errors["userName1"]}
                 </span>
  					    </div>
   					  <div className="form-group">
     					  <label htmlFor="inputPhone">Phone Number</label>
-   					    <input type="tel" className="form-control" id="inputPhone" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required></input>
+   					    <input type="tel" className="form-control" id="inputPhone" placeholder="123-45-678"
+                name="emailORphone"
+                onChange={this.onChange} pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required></input>
  					      <span style={{color: "red"}} className="invalid-message" id="phone">
                 {this.state.errors["phone"]}
                 </span>
               </div>
  					    <div className="form-group">
     					  <label htmlFor="inputPassword1">Password</label>
-   					    <input type="password" className="form-control" id="inputPassword1" placeholder="password" minLength={6} pattern="(?=.*\d)(?=.*[a-z]).{6,}"required></input>
+   					    <input type="password" className="form-control" id="inputPassword1" placeholder="password"
+                name="password"
+                onChange={this.onChange} minLength={6} pattern="(?=.*\d)(?=.*[a-z]).{6,}"required></input>
                 <small className="form-text text-muted">Must be at least 6 characters long, contain letters and numbers</small>
                 <span style={{color: "red"}} className="invalid-message" id="pass1">
                   {this.state.errors["pass1"]}
@@ -105,21 +166,25 @@ class SignUp extends Component {
   			     <form noValidate onSubmit={this.handleSubmit.bind(this)}>
               <div className="form-group">
                 <label htmlFor="inputName2">User Name</label>
-                <input type="name" className="form-control" id="inputName2" placeholder="User Name" required></input>
+                <input type="name" name="userName"
+                onChange={this.onChange} className="form-control" id="inputName2" placeholder="User Name" required></input>
                 <span style={{color: "red"}} className="invalid-message" id="userName2">
                 {this.state.errors["userName2"]}
                 </span>
               </div>
               <div className="form-group">
                 <label htmlFor="iputEmail">Email Address</label>
-                <input type="email" className="form-control" id="iputEmail" placeholder="name@example.com" required></input>
+                <input type="email" name="emailORphone"
+                onChange={this.onChange}
+                className="form-control" id="iputEmail" placeholder="name@example.com" required></input>
                 <span style={{color: "red"}} className="invalid-message" id="email">
                 {this.state.errors["email"]}
                 </span>
               </div>
               <div className="form-group">
               <label htmlFor="inputPassword2">Password</label>
-                <input type="password" className="form-control" id="inputPassword2"  placeholder="password" minLength={6} pattern="(?=.*\d)(?=.*[a-z]).{6,}"required></input>
+                <input type="password"name="password"
+                onChange={this.onChange} className="form-control" id="inputPassword2"  placeholder="password" minLength={6} pattern="(?=.*\d)(?=.*[a-z]).{6,}"required></input>
                 <small className="form-text text-muted">Must be at least 6 characters long, contain letters and numbers</small>
                 <span style={{color: "red"}} className="invalid-message" id="pass2">
                   {this.state.errors["pass2"]}
@@ -161,4 +226,13 @@ class SignUp extends Component {
   		)
   }
 }
-export default SignUp;
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+});
+
+export default connect(
+  mapStateToProps,
+  { register, clearErrors }
+)(SignUp);

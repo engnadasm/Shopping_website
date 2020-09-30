@@ -1,77 +1,139 @@
 import React, { Component } from 'react';
 import { Modal} from "react-bootstrap";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../actions/authActions';
+import { clearErrors } from '../actions/errorActions';
+import {
+Alert
+} from 'reactstrap';
 class Login extends Component {
   constructor() {
         super()
 
         this.state = {
+          modal: true,
             valid: false,
             fields:{},
-            errors:{}
+            errors:{},
+            msg: null,
+            emailORphone: '',
+            password: ''
         }
 
     }
 
-    handleSubmit = (event) =>{
-        let fields = this.state.fields;
-        let errors = {};
-        let formIsValid = true;
+    static propTypes = {
+      isAuthenticated: PropTypes.bool,
+      error: PropTypes.object.isRequired,
+      login: PropTypes.func.isRequired,
+      clearErrors: PropTypes.func.isRequired
+    };
+    componentDidUpdate(prevProps) {
+      const { error, isAuthenticated } = this.props;
+      if (error !== prevProps.error) {
+        // Check for register error
+        if (error.id === 'LOGIN_FAIL') {
+          this.setState({ msg: error.msg.msg });
+        } else {
+          this.setState({ msg: null });
+        }
+      }
+      // If authenticated, close modal
+      if (this.state.modal) {
+        if (isAuthenticated) {
+          this.toggle();
+        }
+      }
+    }
 
-        if(!fields["emailPhone"]){
+    handleSubmit = (event) =>{
+      let errors = {};
+      let formIsValid = true;
+        if(!this.state.emailORphone){
            formIsValid = false;
            errors["emailPhone"] = "Cannot be empty";
-           console.log("email empty")
         }
 
-        if(typeof fields["emailPhone"] !== "undefined"){
-           let lastAtPos = fields["emailPhone"].lastIndexOf('@');
-           let lastDotPos = fields["emailPhone"].lastIndexOf('.');
+        if(typeof this.state.emailORphone !== "undefined"){
+           let lastAtPos = this.state.emailORphone.lastIndexOf('@');
+           let lastDotPos = this.state.emailORphone.lastIndexOf('.');
 
-           if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailPhone"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["emailPhone"].length - lastDotPos) > 2)) {
+           if (!(lastAtPos < lastDotPos && lastAtPos > 0
+              && this.state.emailORphone.indexOf('@@') === -1 && lastDotPos > 2
+           && (this.state.emailORphone.length - lastDotPos) > 2)) {
               formIsValid = false;
               errors["emailPhone"] = "Email is not valid";
             }
-            console.log("email exist")
         }
 
-        if(!fields["password"]){
+        if(!this.state.password){
            formIsValid = false;
            errors["password"] = "Cannot be empty";
         }
 
        this.setState({errors: errors});
        this.setState({valid: formIsValid});
+       if(formIsValid){
+
+          event.preventDefault();
+
+          const { emailORphone, password } = this.state;
+          const user = {
+            emailORphone,
+            password
+          };
+          // Attempt to login
+          this.props.login(user);
+
+        }
+
   };
 
-  handleChange=(e)=>{
-        let fields = this.state.fields;
-        fields[e.target.name] = e.target.value;
-        this.setState({fields});
-    };
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  toggle = () => {
+    // Clear errors
+    this.props.clearErrors();
+    this.setState({
+      modal: !this.state.modal
+    });
+    this.props.onClose();
+  };
   render(){
 
     return (
+
 <Modal  id="LoginPopup" tabIndex="-1" aria-labelledby="LoginPopupTitle"  size="lg"
       centered
-aria-hidden="true" show={this.props.showForm} onHide={()=>this.props.onClose()}>
-      <Modal.Header closeButton style={{backgroundColor:"#0072ff", fontFamily:"Alata"}}>
+aria-hidden="true" show={this.props.showForm && this.state.modal} toggle={this.toggle} onHide={()=>this.props.onClose()}>
+      <Modal.Header toggle={this.toggle} closeButton style={{backgroundColor:"#0072ff", fontFamily:"Alata"}}>
         <h5 className="modal-title" id="LoginPopupTitle">Login</h5>
       </Modal.Header>
       <Modal.Body>
+      {this.state.msg ? (
+        <Alert color='danger'>{this.state.msg}</Alert>
+      ) : null}
         <div className="container">
           <div className="row">
           <div className="col">
-            <form noValidate>
+            <form noValidate onSubmit={this.handleSubmit}>
               <div className="form-group">
-              <label htmlFor="inputPhoneEmail">Email/Phone</label>
-                <input type="email" className="form-control" id="inputPhoneEmail" onChange={this.handleChange} value={this.state.fields["emailPhone"]} name="emailPhone"></input>
+              <label htmlFor="emailORphone">Email/Phone</label>
+                <input type="email" className="form-control"   name='emailORphone'
+                  id='emailORphone' onChange={this.onChange} ></input>
                 <span style={{color: "red"}}>
                  {this.state.errors["emailPhone"]}
                 </span>
               </div>
               <div className="form-group">
-                <label htmlFor="inputPassword">Password</label>
-                <input type="password" className="form-control" id="inputPassword"  onChange={this.handleChange} value={this.state.fields["password"]} name="password" ></input>
+                <label htmlFor="password">Password</label>
+                <input type="password" className="form-control" name='password'
+                id='password'
+                onChange={this.onChange}
+                ></input>
                 <span style={{color: "red"}}>
                  {this.state.errors["password"]}
                 </span>
@@ -101,4 +163,12 @@ aria-hidden="true" show={this.props.showForm} onHide={()=>this.props.onClose()}>
 )
 }
 }
-export default Login;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+});
+
+export default connect(
+  mapStateToProps,
+  { login, clearErrors }
+)(Login);
