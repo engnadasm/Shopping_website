@@ -17,17 +17,17 @@ render(){
     <tr>
         <td className="col-md-6">
         <div className="media">
-            <a className="thumbnail pull-left">
-            <img className="media-object" src={this.props.shopObject.image}
+            <a href="#pics" className="thumbnail pull-left">
+            <img href="#itemPic" className="media-object" src={this.props.shopObject.image}
             alt="imagePic" style={{width: '72px', height: '72px'}}/>
             </a>
             <div className="media-body pl-2">
              <h4> {this.props.shopObject.title} </h4>
 
-                  <p><FaTags/> Tags: <a >
-                  <span class="badge badge-info">{this.props.shopObject.class}</span></a>
-                   <a >
-                  <span class="badge badge-info">{this.props.shopObject.category}</span></a>
+                  <p><FaTags/> Tags: <a href="#class">
+                  <span className="badge badge-info">{this.props.shopObject.class}</span></a>
+                   <a href="#category" >
+                  <span className="badge badge-info">{this.props.shopObject.category}</span></a>
                   </p>
 
 
@@ -37,7 +37,6 @@ render(){
                       rating={this.props.shopObject.rating}
                       starRatedColor="yellow"
                       starDimension="25px"
-                      changeRating={false}
                       numberOfStars={5}
                       starSpacing="2px"
                       name='rating'/>
@@ -46,7 +45,7 @@ render(){
         </div>
         </td>
         <td className="col-md-1" >
-        <input type="email" className="form-control" id="exampleInputEmail1" value="2"/>
+        <input type="email" className="form-control" id={"exampleInputEmail1"+this.props.shopObject.id} defaultValue="2"/>
         </td>
         <td className="col-md-1 text-center"><strong>{this.props.shopObject.price}</strong></td>
         <td className="col-md-1 text-center"><strong>{this.props.shopObject.price}</strong></td>

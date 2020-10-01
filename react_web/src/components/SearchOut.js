@@ -175,7 +175,7 @@ class SearchOut extends Component {
   <div className="card">
   	<article className="filter-group">
   		<header className="card-header">
-  			<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" className="">
+  			<a href="#collapse_1" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" className="">
   				<i className="icon-control fa fa-chevron-down"></i>
   				<h6 className="title">Product Class</h6>
   			</a>
@@ -205,7 +205,7 @@ class SearchOut extends Component {
   				<ul className="list-menu">
 
           {this.state.options1.map(classObject =>
-      		  	<li  key={classObject.value}><a href="#">{classObject.label}  </a></li>
+      		  	<li  key={classObject.value}><a href="#label">{classObject.label}  </a></li>
       		 )}
 
   				</ul>
@@ -215,7 +215,7 @@ class SearchOut extends Component {
   	</article>
   	<article className="filter-group">
   		<header className="card-header">
-  			<a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" className="">
+  			<a href="#collapse_2" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" className="">
   				<i className="icon-control fa fa-chevron-down"></i>
   				<h6 className="title">Category </h6>
   			</a>
@@ -234,7 +234,7 @@ class SearchOut extends Component {
   	</article>
   	<article className="filter-group">
   		<header className="card-header">
-  			<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" className="">
+  			<a href="#collapse_3" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" className="">
   				<i className="icon-control fa fa-chevron-down"></i>
   				<h6 className="title">Price range </h6>
   			</a>
@@ -258,7 +258,7 @@ class SearchOut extends Component {
   	</article>
   	<article className="filter-group">
   		<header className="card-header">
-  			<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" className="">
+  			<a href="#collapse_4" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" className="">
   				<i className="icon-control fa fa-chevron-down"></i>
   				<h6 className="title">Sizes </h6>
   			</a>
@@ -313,11 +313,11 @@ class SearchOut extends Component {
 
   <nav className="mt-4" aria-label="Page navigation sample">
     <ul className="pagination">
-      <li className="page-item disabled"><a className="page-link" href="#">Previous</a></li>
-      <li className="page-item active"><a className="page-link" href="#">1</a></li>
-      <li className="page-item"><a className="page-link" href="#">2</a></li>
-      <li className="page-item"><a className="page-link" href="#">3</a></li>
-      <li className="page-item"><a className="page-link" href="#">Next</a></li>
+      <li className="page-item disabled"><a className="page-link" href="#previous">Previous</a></li>
+      <li className="page-item active"><a className="page-link" href="#nav1">1</a></li>
+      <li className="page-item"><a className="page-link" href="#nav2">2</a></li>
+      <li className="page-item"><a className="page-link" href="#nav3">3</a></li>
+      <li className="page-item"><a className="page-link" href="#next">Next</a></li>
     </ul>
   </nav>
 

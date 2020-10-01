@@ -34,16 +34,13 @@ export default class Routes extends Component {
       this.setState({ showLogin: true });
   };
   removeItem=(shopObject)=>{
-    console.log("Remove...");
       shopObject.stare = false
   }
 
   addItem=(shopObjects)=>{
-    console.log("add...");
     shopObjects.stare = true
   }
   addToCart=(shopObjects)=>{
-    console.log("addToCart...");
     history.push('/Cart')
 
   }

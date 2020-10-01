@@ -30,7 +30,7 @@ class AppNavbar extends Component {
 
 
      render() {
-       const { isAuthenticated, user } = this.props.auth;
+       const { isAuthenticated } = this.props.auth;
 
        var activeClass = {Login: "visible", Logout:"visible "}
            if(isAuthenticated  ){

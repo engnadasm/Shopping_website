@@ -105,10 +105,10 @@ class ViewPage extends Component {
                                                         </Tooltip>
                                                       }
                                                     >
-                                                    <a className="btn "  href="#"
+                                                    <a className="btn float-left" href="#add"
                                                     onClick={()=>this.props.onStare(this.props.shopObject)}>
                                                     <AiTwotoneHeart  style={buttonStyle2}
-                                                     size={25}/></a>
+                                                     size={30}/></a>
                                              </OverlayTrigger>)}
        else { return (<OverlayTrigger
                                                       placement="top"
@@ -118,10 +118,10 @@ class ViewPage extends Component {
                                                         </Tooltip>
                                                       }
                                                     >
-                                                    <a className="btn" href="#"
+                                                    <a className="btn float-left"href="#remove"
                                                     onClick={()=>this.props.onRemove(this.props.shopObject)}>
                                                     <AiTwotoneHeart  style={buttonStyle}
-                                                     size={25}/></a>
+                                                     size={30}/></a>
                                                     </OverlayTrigger>)}
       }
   render() {
@@ -140,11 +140,11 @@ class ViewPage extends Component {
             <div className="tab-pane" id="pic-5"><img alt="imagePic" src="http://placekitten.com/400/252" /></div>
           </div>
           <ul className="preview-thumbnail nav nav-tabs">
-            <li className="active"><a data-target="#pic-1" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
-            <li><a data-target="#pic-2" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
-            <li><a data-target="#pic-3" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
-            <li><a data-target="#pic-4" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
-            <li><a data-target="#pic-5" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
+            <li className="active"><a href="#pic1" data-target="#pic-1" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
+            <li><a href="#pic2" data-target="#pic-2" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
+            <li><a href="#pic3"data-target="#pic-3" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
+            <li><a href="#pic4" data-target="#pic-4" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
+            <li><a href="#pic5" data-target="#pic-5" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
           </ul>
 
         </div>
@@ -156,7 +156,6 @@ class ViewPage extends Component {
               rating={this.props.shopObject.rating}
               starRatedColor="yellow"
               starDimension="25px"
-              changeRating={false}
               numberOfStars={5}
               starSpacing="2px"
               name='rating'/>
@@ -165,9 +164,9 @@ class ViewPage extends Component {
             <span className="review-no">(41 reviews)</span>
           </div>
 
-          <p><FaTags/> Tags: <a href="">
+          <p><FaTags/> Tags: <a href="#tagOfClass">
           <span className="badge badge-info">{this.props.shopObject.class}</span></a>&emsp;
-           <a href="">
+           <a href="#tagOfCategory">
           <span className="badge badge-info">{this.props.shopObject.category}</span></a>
           </p>
 
@@ -185,10 +184,12 @@ class ViewPage extends Component {
             <span className="color blue"></span>
           </h5>
           <div className="action">
-            <button className="add-to-cart btn btn-default" type="button"
-             onClick={()=>this.props.addCart(this.props.shopObject)}  ><FaShoppingCart className="pb-1 pr-1" size="25"/>add to cart</button>
-            {this.renderButtons()}
+            <button className="add-to-cart btn btn-default"
+             onClick={()=>this.props.addCart(this.props.shopObject)}  >
+             <FaShoppingCart className="pb-1" size="25"/>add to cart</button>
           </div>
+          {this.renderButtons()}
+
         </div>
       </div>
     </div>
@@ -205,7 +206,6 @@ class ViewPage extends Component {
                   rating={this.props.shopObject.rating}
                   starRatedColor="yellow"
                   starDimension="23px"
-                  changeRating={false}
                   numberOfStars={5}
                   starSpacing="1px"
                   name='rating'/>
@@ -285,7 +285,7 @@ class ViewPage extends Component {
       <div className="col-md-4 border text-center">
           <div className="card-body">
           <AiTwotoneEdit className="fa fa-pencil-square fa-3x text-success" size={40}/>
-              <a href="#"><h4>Write Your Views</h4></a>
+              <a href="#REVIEW"><h4>Write Your Views</h4></a>
               <small>share your experience/views about this product</small>
           </div>
       </div>

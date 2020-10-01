@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './Service.css';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import Card from 'react-bootstrap/Card';
 import { AiTwotoneHeart } from "react-icons/ai";
 import 'bootstrap/dist/js/bootstrap.min.js'
 import StarRatings from 'react-star-ratings';
@@ -28,7 +27,7 @@ super();
                                                           </Tooltip>
                                                         }
                                                       >
-                                                      <a className="btn float-right"
+                                                      <a className="btn float-right" href="#add"
                                                       onClick={()=>this.props.onStare(this.props.shopObject)}>
                                                       <AiTwotoneHeart  style={buttonStyle2}
                                                        size={25}/></a>
@@ -41,7 +40,7 @@ super();
                                                           </Tooltip>
                                                         }
                                                       >
-                                                      <a className="btn float-right"
+                                                      <a className="btn float-right" href="#remove"
                                                       onClick={()=>this.props.onRemove(this.props.shopObject)}>
                                                       <AiTwotoneHeart  style={buttonStyle}
                                                        size={25}/></a>
@@ -52,16 +51,15 @@ super();
 render(){
   return (
     <div key={this.props.shopObject.id} className="col-md-4">
-    <div class="block-text rel zmin">
-  <div class="mark">My rating:
-  <span class="rating-input">
+    <div className="block-text rel zmin">
+  <div className="mark">My rating:
+  <span className="rating-input">
   <div className="float-right">
 
      <StarRatings
       rating={this.props.shopObject.rating}
       starRatedColor="yellow"
       starDimension="23px"
-      changeRating={false}
       numberOfStars={5}
       starSpacing="1px"
       name='rating'/>
@@ -69,11 +67,11 @@ render(){
       </span>
 </div>
     <p>{this.props.shopObject.description}</p>
-  <ins class="ab zmin sprite sprite-i-triangle block"></ins>
+  <ins className="ab zmin sprite sprite-i-triangle block"></ins>
   </div>
-<div class="person-text rel">
-        <img src={this.props.shopObject.image} class="avatar" alt="Avatar"/>
-<a title="" href="#">{this.props.shopObject.title}</a>
+<div className="person-text rel">
+        <img src={this.props.shopObject.image} className="avatar" alt="Avatar"/>
+<a title="" href="#name">{this.props.shopObject.title}</a>
 </div>
     </div>
   )

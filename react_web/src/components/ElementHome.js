@@ -28,7 +28,7 @@ super();
                                                           </Tooltip>
                                                         }
                                                       >
-                                                      <a className="btn float-right"
+                                                      <a className="btn float-right" href="#add"
                                                       onClick={()=>this.props.onStare(this.props.shopObject)}>
                                                       <AiTwotoneHeart  style={buttonStyle2}
                                                        size={25}/></a>
@@ -41,7 +41,7 @@ super();
                                                           </Tooltip>
                                                         }
                                                       >
-                                                      <a className="btn float-right"
+                                                      <a className="btn float-right" href="#remove"
                                                       onClick={()=>this.props.onRemove(this.props.shopObject)}>
                                                       <AiTwotoneHeart  style={buttonStyle}
                                                        size={25}/></a>

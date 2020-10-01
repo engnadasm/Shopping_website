@@ -44,8 +44,6 @@ class Cart extends Component {
         };
     }
     removeItem=(shopObject)=>{
-        console.log("remove-----------------------")
-        console.log(shopObject)
         var newShopObjects = [...this.state.shopObjects];
         var index = newShopObjects.indexOf(shopObject);
        if (index > -1) {

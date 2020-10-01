@@ -10,7 +10,6 @@ import store from './store';
 import Routes from './Routes'
 
 import { loadUser } from './actions/authActions';
-import { Container } from 'reactstrap';
 
 class App extends Component {
   componentDidMount() {

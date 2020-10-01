@@ -215,19 +215,19 @@ constructor(){
 					<div className="container">
 				 <ul className="nav nav-tabs justify-content-center">
 				  <li className="nav-item">
-				    <a className={activeClass.Profile} style={{color: '#0062cc'}} onClick={this.setProfile}>Profile</a>
+				    <a href="#profile" className={activeClass.Profile} style={{color: '#0062cc'}} onClick={this.setProfile}>Profile</a>
 				  </li>
 				  <li className="nav-item">
-				    <a className={activeClass.Favourites} style={{color: '#0062cc'}} onClick={this.setFavourites}>Favourites</a>
+				    <a href="#favourites" className={activeClass.Favourites} style={{color: '#0062cc'}} onClick={this.setFavourites}>Favourites</a>
 				  </li>
 				  <li className="nav-item">
-				    <a className={activeClass.Password} style={{color: '#0062cc'}} onClick={this.setPassword}>Change Password</a>
+				    <a href="#password"className={activeClass.Password} style={{color: '#0062cc'}} onClick={this.setPassword}>Change Password</a>
 				  </li>
 				</ul>
 				<div className="row">
 				<div className="col-md-3">
 				<div className="mycontainer">
-				<img className="circular-img" src={"https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg"}/>
+				<img href="#picUser" className="circular-img" alt="userPic" src={"https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg"}/>
 				<button className="btn"><i className="fa fa-pencil"></i>Edit</button>
 				<h3>User name</h3>
 				</div>
