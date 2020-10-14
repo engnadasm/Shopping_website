@@ -4,7 +4,10 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import history from './../history';
 
-function Header() {
+import { connect } from 'react-redux';
+
+function Header(props) {
+  const { isAuthenticated } = props.auth;
   const animatedComponents = makeAnimated();
   const [isDisabled, setDisabled] = useState(false)
   const [options2, setOption2] = useState( [
@@ -70,6 +73,15 @@ function Header() {
 const search = () => {
   history.push('/SearchOut')
 }
+
+const renderButtons=()=>{
+    if (isAuthenticated){ return (<div></div>)}
+   else {return (<div className="">
+       <a className="btn btn-theme btn-sm btn-min-block" href="/LoginPopup">Login</a>
+       <a className="btn btn-theme btn-sm btn-min-block" href="/signUp">Register</a>
+   </div>)}
+  }
+
   return (
     <header id="header">
         <section>
@@ -85,10 +97,7 @@ const search = () => {
                         <h3 className="p-2">
                           <span>The place to find the best products for every taste and occasion.</span>
                         </h3>
-                        <div className="">
-                            <a className="btn btn-theme btn-sm btn-min-block" href="/LoginPopup">Login</a>
-                            <a className="btn btn-theme btn-sm btn-min-block" href="/signUp">Register</a>
-                        </div>
+                        {renderButtons()}
                     </div>
                 </div>
                 <section className="search-sec">
@@ -142,10 +151,7 @@ const search = () => {
                         <h3 className="p-2">
                           <span>We aim to offer our customers a variety of the latest products.</span>
                         </h3>
-                        <div className="">
-                            <a className="btn btn-theme btn-sm btn-min-block" href="/LoginPopup">Login</a>
-                            <a className="btn btn-theme btn-sm btn-min-block" href="/signUp">Register</a>
-                        </div>
+                        {renderButtons()}
                     </div>
                 </div>
                 <section className="search-sec">
@@ -199,10 +205,7 @@ const search = () => {
                         <h3 className="p-2">
                           <span>We offer all of this while providing excellent customer service and friendly support.</span>
                         </h3>
-                        <div className="">
-                            <a className="btn btn-theme btn-sm btn-min-block" href="/LoginPopup">Login</a>
-                            <a className="btn btn-theme btn-sm btn-min-block" href="/signUp">Register</a>
-                        </div>
+                        {renderButtons()}
                     </div>
                 </div>
                 <section className="search-sec">
@@ -259,5 +262,11 @@ const search = () => {
     </header>
   )
 }
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-export default Header
+export default connect(
+  mapStateToProps,
+  null
+)(Header);

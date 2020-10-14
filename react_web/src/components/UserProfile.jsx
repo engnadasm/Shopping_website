@@ -1,8 +1,17 @@
 import React, { Component } from "react";
 import "./UserProfile.css";
 import ElementHome from "./ElementFav";
+import history from './../history';
+import { connect } from 'react-redux';
+import { loadUser} from '../actions/authActions';
+import PropTypes from 'prop-types';
+import axios from "axios";
 
 class UserProfile extends Component {
+	componentDidMount() {
+    this.props.loadUser();
+  }
+
 constructor(){
 	super()
 	this.state={
@@ -13,12 +22,53 @@ constructor(){
         confirmNewPass:"",
         checkMessage: "",
         matching: "",
-        shopObjects: []
+        shopObjects: [],
+				picture: false,
+		 	src: false
 	}
 	this.nameRef = React.createRef();
 	this.emailRef = React.createRef();
 	this.workRef = React.createRef();
 }
+handlePictureSelected(event) {
+    var picture = event.target.files[0];
+    var src = URL.createObjectURL(picture);
+
+    this.setState({
+      picture: picture,
+      src: src
+    });
+		var formData = new FormData();
+
+		 formData.append("file", picture)
+		 formData.append("upload_preset","insta-clone")
+		 formData.append("cloud_name","nada2020")
+		 formData.append("api_key",'466459189789469');
+		 axios
+			 .post('https://api.cloudinary.com/v1_1/nada2020/image/upload', formData, {headers: {
+					 'Content-Type': 'multipart/form-data'
+				 }})
+			 .then(response =>{
+				 console.log(response);
+				 this.setState({
+					 src: response.data.url
+				 });
+				 console.log(this.state.src);
+
+			 }
+			 )
+			 .catch(error => console.log(error));
+
+  }
+
+  renderPreview() {
+
+    if (this.state.src) {
+      return <img className="preview-img" alt="Preview"src={this.state.src} width="200" height="200" />;
+    } else {
+      return <img className="preview-img" src="http://simpleicon.com/wp-content/uploads/account.png" alt="Preview" width="200" height="200"/>;
+    }
+  }
 
 	setProfile=()=>{
 		this.setState({data : "Profile"});
@@ -134,10 +184,12 @@ constructor(){
 	viewShopPage=(shopObject)=>{
 		var index = this.state.shopObjects.indexOf(shopObject);
    		 if (index > -1) {
-		console.log("view-----------------------")
-        console.log(shopObject)
-		}
+				 history.push('/ViewPage')
+			 }
     }
+		addToCart=(shopObjects)=>{
+			history.push('/Cart')
+		}
     removeItem=(shopObject)=>{
         console.log("remove-----------------------")
         console.log(shopObject)
@@ -150,6 +202,15 @@ constructor(){
 
     }
 	renderData=()=>{
+		const user = this.props.user;
+		let name = "userName";
+		let email = "email";
+		let pass = "pass";
+if(user !== null) {
+name = user.userName;
+email = user.emailORphone;
+pass = user.date;
+}
 		if(this.state.data === "Password"){
 		return(	<div>
 				<h3>Change Password</h3>
@@ -170,14 +231,15 @@ constructor(){
 		return(	<div>
 				<div>
 				<h3 className="d-inline">My Profile</h3>
-				<button className="btn btn-outline-dark float-right" onClick={this.enableEditing}><i className="fa fa-pencil"></i>Edit</button>
+				<button className="btn btn-outline-dark float-right" onClick={this.enableEditing}>
+				<i className="fa fa-pencil"></i>Edit</button>
 				</div>
 				<label htmlFor="userName">User Name</label>
-				<input disabled ref={this.nameRef} type="text" id="userName" className="form-control" placeholder="User Name" value="User Name"></input>
+				<input disabled ref={this.nameRef} type="text" id="userName" className="form-control" placeholder="User Name" value={name}></input>
 			    <label htmlFor="email">Email</label>
-                <input disabled ref={this.emailRef} type="email"id="email" className="form-control" placeholder="name@example.com" value="name@example.com"></input>
+                <input disabled ref={this.emailRef} type="email"id="email" className="form-control" placeholder="name@example.com" value={email}></input>
                 <label htmlFor="Work">Work</label>
-                <input disabled ref={this.workRef} type="text"id="Work" className="form-control" placeholder="-" value="work"></input>
+                <input disabled ref={this.workRef} type="text"id="Work" className="form-control" placeholder="-" value={pass}></input>
                 <label className="pr-3">Gender:</label>
                 <input type="radio" id="male" name="gender" value="male"></input>
 				<label className="pr-2" htmlFor="male">Male</label>
@@ -227,8 +289,19 @@ constructor(){
 				<div className="row">
 				<div className="col-md-3">
 				<div className="mycontainer">
-				<img href="#picUser" className="circular-img" alt="userPic" src={"https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg"}/>
-				<button className="btn"><i className="fa fa-pencil"></i>Edit</button>
+								<div className="preview text-center">
+								{this.renderPreview()}
+				                <div className="browse-button">
+				                    <i className="fa fa-pencil-alt"></i>
+				                    <input className="browse-input file-upload" type="file"  name="file"
+														data-cloudinary-field="image_id"
+		 										   data-form-data="{ 'transformation': {'crop':'limit','tags':'samples','width':3000,'height':2000}}"
+													  id="UploadedFile"
+														onChange={this.handlePictureSelected.bind(this)}/>
+				                </div>
+				                <span className="Error"></span>
+				            </div>
+
 				<h3>User name</h3>
 				</div>
 				</div>
@@ -240,4 +313,16 @@ constructor(){
         	</div>);
     }
 	}
-export default UserProfile;
+
+	UserProfile.propTypes = {
+	  loadUser: PropTypes.func.isRequired
+	};
+
+	const mapStateToProps = state => ({
+		user: state.auth.user
+	});
+
+	export default connect(
+	  mapStateToProps,
+	  { loadUser }
+	)(UserProfile);

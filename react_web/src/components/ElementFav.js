@@ -72,7 +72,6 @@ render(){
                 rating={this.props.shopObject.rating}
                 starRatedColor="yellow"
                 starDimension="25px"
-                changeRating={false}
                 numberOfStars={5}
                 starSpacing="2px"
                 name='rating'/>
