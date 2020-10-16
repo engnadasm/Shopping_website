@@ -29,8 +29,20 @@ router.get('/', async (req, res) => {
  */
 
 router.post('/', async (req, res) => {
+  const {name,price,category,mainPic,pic,quantity} = req.body
+   if(!name|| !price || !category || !quantity){
+     return  res.status(422).json({error:"Plase add all the fields"})
+   }
+//  req.user.password = undefined
   const newItem = new Item({
-    name: req.body.name
+    name: req.body.name,
+    price : req.body.price,
+    class: req.body.class,
+    category: req.body.category,
+    mainPic: req.body.mainPic,
+    Pic: req.body.Pic,
+    quantity: req.body.quantity,
+    postedBy:req.user
   });
 
   try {
@@ -62,6 +74,27 @@ router.delete('/:id', async (req, res) => {
   } catch (e) {
     res.status(400).json({ msg: e.message, success: false });
   }
+});
+
+router.put('/reviews',async (req,res)=>{
+    const review = {
+        text:req.body.text,
+      //  postedBy:req.user._id
+    }
+    Item.findByIdAndUpdate(req.body.postId,{
+        $push:{reviews:review}
+    },{
+        new:true
+    })
+    .populate("reviews.postedBy","_id name")
+    .populate("postedBy","_id name")
+    .exec((err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }else{
+            res.json(result)
+        }
+    })
 });
 
 

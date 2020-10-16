@@ -59,4 +59,113 @@ router.get('/user', auth, (req, res) => {
     .then(user => res.json(user));
 });
 
+router.put('/favorite',auth,(req,res)=>{
+    User.findByIdAndUpdate(req.user.id,{
+        $push:{favorite:req.body.item._id}
+    },{
+        new:true
+    },(err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }
+    }
+    )
+})
+router.put('/unfavorite',auth,(req,res)=>{
+    User.findByIdAndUpdate(req.user.id,{
+        $pull:{favorite:req.body.item._id}
+    },{
+        new:true
+    },(err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }
+    }
+    )
+})
+
+router.put('/cart',auth,(req,res)=>{
+    User.findByIdAndUpdate(req.user.id,{
+        $push:{cart:req.body.item._id}
+    },{
+        new:true
+    },(err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }
+    }
+    )
+})
+router.put('/uncart',auth,(req,res)=>{
+    User.findByIdAndUpdate(req.user.id,{
+        $pull:{cart:req.body.item._id}
+    },{
+        new:true
+    },(err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }
+    }
+    )
+})
+
+router.put('/updatepic',auth,(req,res)=>{
+    User.findByIdAndUpdate(req.user.id,
+      {$set:{src:req.body.src}},
+      {new:true},
+        (err,result)=>{
+         if(err){
+             return res.status(422).json({error:"pic canot post"})
+         }
+         res.json(result)
+    })
+})
+
+router.post('/reset-password',(req,res)=>{
+     crypto.randomBytes(32,(err,buffer)=>{
+         if(err){
+             console.log(err)
+         }
+         const token = buffer.toString("hex")
+         User.findOne({emailORphone:req.body.emailORphone})
+         .then(user=>{
+             if(!user){
+                 return res.status(422).json({error:"User dont exists with that email"})
+             }
+             user.save().then((result)=>{
+                 transporter.sendMail({
+                     to:user.email,
+                     from:"no-replay@insta.com",
+                     subject:"password reset",
+                     html:`
+                     <p>You requested for password reset</p>
+                     <h5>click in this <a href="${EMAIL}/reset/${token}">link</a> to reset password</h5>
+                     `
+                 })
+                 res.json({message:"check your email"})
+             })
+
+         })
+     })
+})
+
+
+router.put('/new-password',auth,(req,res)=>{
+    console.log(req.body.password)
+
+    bcrypt.hash(req.body.password,10)
+     .then(hashedpassword=>{
+       console.log(hashedpassword);
+       User.findByIdAndUpdate(req.user.id,
+         {$set:{password:hashedpassword}},
+         {new:true},
+           (err,result)=>{
+            if(err){
+                return res.status(422).json({error:"pic canot post"})
+            }
+            res.json(result)
+       })
+    })
+})
+
 module.exports = router;

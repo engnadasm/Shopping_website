@@ -24,7 +24,8 @@ constructor(){
         matching: "",
         shopObjects: [],
 				picture: false,
-		 	src: false
+		 	src: false,
+			userName:"userName"
 	}
 	this.nameRef = React.createRef();
 	this.emailRef = React.createRef();
@@ -54,21 +55,34 @@ handlePictureSelected(event) {
 					 src: response.data.url
 				 });
 				 console.log(this.state.src);
+				 // Headers
+				 const config = {
+					 headers: {
+						 "Content-Type":"application/json",
+ 							"x-auth-token": this.props.token,
+ 							"user": this.props.user,
+							"src":response.data.url
+ 				 		}
+				 };
 
+				 // Request body
+				 const {src } = this.state;
+				 const body = JSON.stringify({src});
+
+				 axios
+				 	.put('/api/auth/updatepic',body, config)
+				 	.then(response =>{
+				 		console.log(response);
+				 	}
+				 	)
+				 	.catch(error => console.log(error));
 			 }
 			 )
 			 .catch(error => console.log(error));
 
   }
 
-  renderPreview() {
 
-    if (this.state.src) {
-      return <img className="preview-img" alt="Preview"src={this.state.src} width="200" height="200" />;
-    } else {
-      return <img className="preview-img" src="http://simpleicon.com/wp-content/uploads/account.png" alt="Preview" width="200" height="200"/>;
-    }
-  }
 
 	setProfile=()=>{
 		this.setState({data : "Profile"});
@@ -209,7 +223,7 @@ handlePictureSelected(event) {
 if(user !== null) {
 name = user.userName;
 email = user.emailORphone;
-pass = user.date;
+pass = user.gender;
 }
 		if(this.state.data === "Password"){
 		return(	<div>
@@ -265,8 +279,31 @@ pass = user.date;
 
 
 	}
+ pic() {
+    try {
+			const user = this.props.user;
+			if(user != null && !this.state.picture){
+      	this.setState({ src: user.src,userName:user.userName });
+			}
+    } catch (error) {
+      console.log(error);
+    }
+}
+
+renderPreview() {
+	this.pic();
+
+    if (this.state.src) {
+      return <img className="preview-img" alt="Preview"src={this.state.src} width="200" height="200" />;
+    } else {
+			this.setState({ src: "http://simpleicon.com/wp-content/uploads/account.png" });
+      return <img className="preview-img" src="http://simpleicon.com/wp-content/uploads/account.png" alt="Preview" width="200" height="200"/>;
+    }
+  }
+
 	render() {
 		const content = this.renderData()
+
 		var activeClass = {Profile: "nav-link active", Favourites:"nav-link ", Password:"nav-link"}
 		if(this.state.data === "Favourites"){
 			activeClass = {Profile: "nav-link ", Favourites:"nav-link  active", Password:"nav-link"}
@@ -294,7 +331,7 @@ pass = user.date;
 				                <div className="browse-button">
 				                    <i className="fa fa-pencil-alt"></i>
 				                    <input className="browse-input file-upload" type="file"  name="file"
-														data-cloudinary-field="image_id"
+														data-cloudinary-field="image_id" accept="image/*"
 		 										   data-form-data="{ 'transformation': {'crop':'limit','tags':'samples','width':3000,'height':2000}}"
 													  id="UploadedFile"
 														onChange={this.handlePictureSelected.bind(this)}/>
@@ -302,7 +339,7 @@ pass = user.date;
 				                <span className="Error"></span>
 				            </div>
 
-				<h3>User name</h3>
+				<h3 className="browse-name">{this.state.userName}</h3>
 				</div>
 				</div>
 				<span className="border-left border-secondary m-5 d-none d-md-block" style={{height: "500px"}}></span>
@@ -319,7 +356,8 @@ pass = user.date;
 	};
 
 	const mapStateToProps = state => ({
-		user: state.auth.user
+		user: state.auth.user,
+		token : state.auth.token
 	});
 
 	export default connect(

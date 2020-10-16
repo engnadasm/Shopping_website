@@ -2,6 +2,7 @@ const mongoose = require('mongoose');//we use it as database
 //for validation of email
 const Schema = mongoose.Schema;
 const model = mongoose.model;
+const {ObjectId} = mongoose.Schema.Types
 
 // Create Schema
 
@@ -23,8 +24,16 @@ const UserSchema = new Schema({
     required: true
   },
   gender: {
-    type: String
-  }
+    type: String,
+    required: true
+  },
+  src:{
+     type:String,
+     default:"http://simpleicon.com/wp-content/uploads/account.png"
+  },
+  favorite:[{type:ObjectId,ref:"item"}],
+  cart:[{type:ObjectId,ref:"item"}]
+
 });
 
 const User = model('user', UserSchema);

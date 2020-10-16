@@ -12,10 +12,10 @@ const User = require('../../models/User');
 // @desc    Register new user
 // @access  Public
 router.post('/', (req, res) => {
-  const { userName, emailORphone, password } = req.body;
+  const { userName, emailORphone, password,gender ,src } = req.body;
 
   // Simple validation
-  if(!userName || !emailORphone || !password) {
+  if(!userName || !emailORphone || !password || !gender ) {
     return res.status(400).json({ msg: 'Please enter all fields' });
   }
 
@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
       const newUser = new User({
         userName,
         emailORphone,
-        password
+        password,gender ,src
       });
 
       // Create salt & hash
@@ -48,7 +48,9 @@ router.post('/', (req, res) => {
                     user: {
                       id: user.id,
                       userName: user.userName,
-                      emailORphone: user.emailORphone
+                      emailORphone: user.emailORphone,
+                      gender: user.gender ,
+                      src: user.src
                     }
                   });
                 }

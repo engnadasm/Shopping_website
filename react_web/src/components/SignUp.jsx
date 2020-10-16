@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
+import axios from "axios";
 
 class SignUp extends Component {
    constructor() {
         super()
-
         this.state = {
             setValidated: false,
             validated: false,
@@ -17,12 +17,52 @@ class SignUp extends Component {
           date: '',
           emailORphone:'',
           password: '',
-          gender: '',
-          msg: null
-
+          gender: 'other',
+          msg: null,
+          picture: false,
+  		 	   src: false
         }
-
     }
+    handlePictureSelected(event) {
+        var picture = event.target.files[0];
+        var src = URL.createObjectURL(picture);
+
+        this.setState({
+          picture: picture,
+          src: src
+        });
+    		var formData = new FormData();
+
+    		 formData.append("file", picture)
+    		 formData.append("upload_preset","insta-clone")
+    		 formData.append("cloud_name","nada2020")
+    		 formData.append("api_key",'466459189789469');
+    		 axios
+    			 .post('https://api.cloudinary.com/v1_1/nada2020/image/upload', formData, {headers: {
+    					 'Content-Type': 'multipart/form-data'
+    				 }})
+    			 .then(response =>{
+    				 console.log(response);
+    				 this.setState({
+    					 src: response.data.url
+    				 });
+    				 console.log(this.state.src);
+
+    			 }
+    			 )
+    			 .catch(error => console.log(error));
+
+      }
+
+      renderPreview() {
+
+        if (this.state.src) {
+          return <img className="preview-img" alt="Preview"src={this.state.src} width="200" height="200" />;
+        } else {
+          return <img className="preview-img" src="http://simpleicon.com/wp-content/uploads/account.png" alt="Preview" width="200" height="200"/>;
+        }
+      }
+
     onChange = e => {
           this.setState({ [e.target.name]: e.target.value });
         };
@@ -51,13 +91,15 @@ class SignUp extends Component {
     } else {
       event.preventDefault();
 
-      const { userName, emailORphone, password } = this.state;
+      const { userName, emailORphone, password,gender , src } = this.state;
 
       // Create user object
       const newUser = {
         userName,
         emailORphone,
-        password
+        password,
+        gender,
+        src
       };
 
       // Attempt to register
@@ -106,6 +148,24 @@ class SignUp extends Component {
           <h4 className="titles">Sign up with phone number</h4>
           </div>
           </div>
+
+          <div className="row">
+          <div className="col">
+          <div className="preview form-group text-center">
+          {this.renderPreview()}
+                  <div className="browse-button">
+                      <i className="fa fa-pencil-alt"></i>
+                      <input className="browse-input file-upload" type="file"  name="file"
+                      data-cloudinary-field="image_id" accept="image/*"
+                     data-form-data="{ 'transformation': {'crop':'limit','tags':'samples','width':3000,'height':2000}}"
+                      id="UploadedFile"
+                      onChange={this.handlePictureSelected.bind(this)}/>
+                  </div>
+                  <span className="Error"></span>
+              </div>
+              </div>
+              </div>
+
           <div className="row">
           <div className="col">
   				  <form noValidate onSubmit={this.handleSubmit.bind(this)}>
@@ -137,6 +197,14 @@ class SignUp extends Component {
                   {this.state.errors["pass1"]}
                 </span>
  					    </div>
+              <div className="form-group">
+              <label className="pr-3">Gender:</label>
+              <input type="radio" id="male" name="gender" value="male"></input>
+            <label className="pr-2" htmlFor="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female"></input>
+            <label htmlFor="female">Female</label>
+            </div>
+
               <button className="btn btn-outline-dark float-right" type="submit"><i className="fa fa-sign-in"></i> Sign up</button>
   				  </form>
             </div>
@@ -161,6 +229,24 @@ class SignUp extends Component {
           <h4 className="titles">Sign up with email address</h4>
           </div>
           </div>
+
+          <div className="row">
+          <div className="col">
+          <div className="preview form-group text-center">
+          {this.renderPreview()}
+                  <div className="browse-button">
+                      <i className="fa fa-pencil-alt"></i>
+                      <input className="browse-input file-upload" type="file"  name="file"
+                      data-cloudinary-field="image_id" accept="image/*"
+                     data-form-data="{ 'transformation': {'crop':'limit','tags':'samples','width':3000,'height':2000}}"
+                      id="UploadedFile"
+                      onChange={this.handlePictureSelected.bind(this)}/>
+                  </div>
+                  <span className="Error"></span>
+              </div>
+              </div>
+              </div>
+
               <div className="row">
               <div className="col">
   			     <form noValidate onSubmit={this.handleSubmit.bind(this)}>
@@ -190,6 +276,13 @@ class SignUp extends Component {
                   {this.state.errors["pass2"]}
                 </span>
               </div>
+              <div className="form-group">
+              <label className="pr-3">Gender:</label>
+              <input type="radio" id="male" name="gender" value="male"></input>
+            <label className="pr-2" htmlFor="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female"></input>
+            <label htmlFor="female">Female</label>
+            </div>
               <button className="btn btn-outline-dark float-right" type="submit"><i className="fa fa-sign-in"></i> Sign up</button>
             </form>
             </div>

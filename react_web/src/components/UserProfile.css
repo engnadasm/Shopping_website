@@ -31,6 +31,15 @@
     transition: 0.3s ease;
 }
 
+.browse-name
+{
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    position: absolute; /* Tweak the position property if the element seems to be unfit */
+}
+
+
 .browse-button:hover
 {
     opacity: 1;
