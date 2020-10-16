@@ -5,8 +5,14 @@ import { FaShoppingCart,FaPlay } from "react-icons/fa";
 import ElementCart from "./ElementCart";
 import history from './../history';
 
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getItems } from '../actions/itemActions';
 class Cart extends Component {
-  constructor(props) {
+  componentDidMount() {
+    this.props.getItems();
+  }
+  constructor() {
         super()
         this.state = {
             shopObjects : [
@@ -57,6 +63,8 @@ class Cart extends Component {
       history.push('/SearchOut')
     }
   render() {
+    const it = this.props.item.items;
+
     return (
       <div className="container">
 
@@ -73,7 +81,7 @@ class Cart extends Component {
                       </tr>
                   </thead>
                   <tbody>
-                  {this.state.shopObjects.map(shopObject =>
+                  {it.map(shopObject =>
               		  <ElementCart key={shopObject.id} shopObject={shopObject} onRemove={this.removeItem}/>
               		 )}
 
@@ -125,4 +133,16 @@ class Cart extends Component {
   }
 }
 
-export default Cart;
+Cart.propTypes = {
+  getItems: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  item: state.item
+});
+
+export default connect(
+  mapStateToProps,
+  { getItems}
+)(Cart);

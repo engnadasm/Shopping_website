@@ -6,8 +6,14 @@ import { FaSearch } from "react-icons/fa";
 import ElementHome from './ElementSearch';
 import history from './../history';
 
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getItems } from '../actions/itemActions';
 class SearchOut extends Component {
-  constructor(props){
+  componentDidMount() {
+    this.props.getItems();
+  }
+  constructor(){
   super();
   this.state = {
     shopObjects : [
@@ -72,7 +78,7 @@ class SearchOut extends Component {
           price:'12 $',
           stare : false, class : "Ladies" , category : 'Tops'
 
-          }],
+        }],
             options1 : [
                           { value: 'Ladies', label: 'Ladies' },
                           { value: 'Men', label: 'Men' },
@@ -87,11 +93,13 @@ class SearchOut extends Component {
                                       { value: 'All', label: 'All' }
 
                                     ],
-            page : 0
+            page : 0,
+            isLoaded: false
         }
+
         this.addItem = this.addItem.bind(this);
 
-}
+       }
 
         removeItem=(shopObject)=>{
           console.log("Remove...");
@@ -102,6 +110,7 @@ class SearchOut extends Component {
           shopObjects.stare = true;
           this.addItem = this.addItem.bind(this);
           console.log("add...");
+
 
         }
         addToCart=(shopObjects)=>{
@@ -163,11 +172,11 @@ class SearchOut extends Component {
     }
    handleChange2 = (selectedOption2) => {
     }
-
-
+    
   render() {
-    const animatedComponents = makeAnimated();
+    const it = this.props.item.items;
 
+    const animatedComponents = makeAnimated();
     return (
   	<div className="row p-3">
   	<aside className="col-md-3">
@@ -305,10 +314,11 @@ class SearchOut extends Component {
   </header>
 
   <div className="row">
-  {this.state.shopObjects.map(shopObject1 =>
+  {it.map(shopObject1 =>
     <ElementHome key={shopObject1.id} shopObject={shopObject1} onClick={this.viewShopPage}
           isStarred={shopObject1.stare} onStare={()=>this.addItem(shopObject1)} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}
+
   </div>
 
   <nav className="mt-4" aria-label="Page navigation sample">
@@ -322,10 +332,22 @@ class SearchOut extends Component {
   </nav>
 
   	</main>
+
   	</div>
 
     )
   }
 }
+SearchOut.propTypes = {
+  getItems: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
 
-export default SearchOut;
+const mapStateToProps = state => ({
+  item: state.item
+});
+
+export default connect(
+  mapStateToProps,
+  { getItems}
+)(SearchOut);

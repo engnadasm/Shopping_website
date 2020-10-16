@@ -18,11 +18,11 @@ render(){
         <td className="col-md-6">
         <div className="media">
             <a href="#pics" className="thumbnail pull-left">
-            <img href="#itemPic" className="media-object" src={this.props.shopObject.image}
+            <img href="#itemPic" className="media-object" src={this.props.shopObject.mainPic}
             alt="imagePic" style={{width: '72px', height: '72px'}}/>
             </a>
             <div className="media-body pl-2">
-             <h4> {this.props.shopObject.title} </h4>
+             <h4> {this.props.shopObject.name} </h4>
 
                   <p><FaTags/> Tags: <a href="#class">
                   <span className="badge badge-info">{this.props.shopObject.class}</span></a>
@@ -45,7 +45,7 @@ render(){
         </div>
         </td>
         <td className="col-md-1" >
-        <input type="email" className="form-control" id={"exampleInputEmail1"+this.props.shopObject.id} defaultValue="2"/>
+        <input type="email" className="form-control" id={"exampleInputEmail1"+this.props.shopObject._id} defaultValue="2"/>
         </td>
         <td className="col-md-1 text-center"><strong>{this.props.shopObject.price}</strong></td>
         <td className="col-md-1 text-center"><strong>{this.props.shopObject.price}</strong></td>

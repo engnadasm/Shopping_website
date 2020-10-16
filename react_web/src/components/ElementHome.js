@@ -51,7 +51,7 @@ super();
 
 render(){
   return (
-    <div key={this.props.shopObject.id} className="col-md-4">
+    <div key={this.props.shopObject._id} className="col-md-4">
       <div className="item-box-blog">
         <div className="item-box-blog-image">
           <div className="item-box-blog-date bg-blue-ui white">
@@ -59,10 +59,10 @@ render(){
            <div className="item-box-blog-class bg-blue-ui white">
             <span className="mon">{this.props.shopObject.class}</span> </div>
           <figure> <img alt=""className="pt-1"
-          src={this.props.shopObject.image}/> </figure>
+          src={this.props.shopObject.mainPic}/> </figure>
         </div>
         <div className="item-box-blog-body">
-        <Card.Title>{this.props.shopObject.title}
+        <Card.Title>{this.props.shopObject.name}
                   {this.renderButtons()}
                   </Card.Title>
 

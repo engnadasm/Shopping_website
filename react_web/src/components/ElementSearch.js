@@ -54,11 +54,11 @@ super();
 
 render(){
   return (
-    <div className="col-md-4" key={this.props.shopObject.id}>
+    <div className="col-md-4" key={this.props.shopObject._id}>
                        <div className="single-publication">
                            <figure>
                                <a href="#pic">
-                                   <img src={this.props.shopObject.image} alt="Publication"/>
+                                   <img src={this.props.shopObject.mainPic} alt="Publication"/>
                                </a>
 
                                <ul>
@@ -69,7 +69,7 @@ render(){
 
                            <div className="publication-content">
                                <span className="category">{this.props.shopObject.category}</span>
-                               <h3><a href="#name">{this.props.shopObject.title}</a></h3>
+                               <h3><a href="#name">{this.props.shopObject.name}</a></h3>
 
                                   <StarRatings
                                    rating={this.props.shopObject.rating}

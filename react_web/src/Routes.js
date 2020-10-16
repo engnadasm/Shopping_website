@@ -8,6 +8,7 @@ import UserProfile from './components/UserProfile'
 import Cart from './components/Cart'
 import SearchOut from './components/SearchOut'
 import ViewPage from './components/ViewPage'
+import ShoppingList from './components/ShoppingList'
 
 import history from './history';
 
@@ -52,6 +53,7 @@ export default class Routes extends Component {
                     <Route path="/LoginPopup" component={() => <Login showForm={this.state.showLogin} onClose={this.onCloseModal} />}/>
                     <Route path="/signUp" component={SignUp} />
                     <Route path="/UserProfile" component={UserProfile} />
+                    <Route path="/ShoppingList" component={ShoppingList} />
                     <Route path="/Cart" component={Cart} />
                     <Route path="/SearchOut" component={() => <SearchOut shopObject={this.state.shopObject}
                     isStarred={this.state.shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>} />

@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
  */
 
 router.post('/', async (req, res) => {
-  const {name,price,category,mainPic,pic,quantity} = req.body
+  const {name,price,category,mainPic,pic,quantity,rating} = req.body
    if(!name|| !price || !category || !quantity){
      return  res.status(422).json({error:"Plase add all the fields"})
    }
@@ -42,6 +42,7 @@ router.post('/', async (req, res) => {
     mainPic: req.body.mainPic,
     Pic: req.body.Pic,
     quantity: req.body.quantity,
+    rating:req.body.rating,
     postedBy:req.user
   });
 

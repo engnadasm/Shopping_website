@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 import { loadUser} from '../actions/authActions';
 import PropTypes from 'prop-types';
 import axios from "axios";
+import { getItems } from '../actions/itemActions';
 
 class UserProfile extends Component {
 	componentDidMount() {
     this.props.loadUser();
+		this.props.getItems();
   }
 
 constructor(){
@@ -25,11 +27,14 @@ constructor(){
         shopObjects: [],
 				picture: false,
 		 	src: false,
-			userName:"userName"
+			userName:"userName",
+			gender:""
 	}
 	this.nameRef = React.createRef();
 	this.emailRef = React.createRef();
 	this.workRef = React.createRef();
+	this.genderRef1 = React.createRef();
+	this.genderRef2 = React.createRef();
 }
 handlePictureSelected(event) {
     var picture = event.target.files[0];
@@ -90,71 +95,12 @@ handlePictureSelected(event) {
 	setFavourites=()=>{
 		this.setState({data : "Favourites"});
 		if(this.state.shopObjects.length === 0){
-			this.setState({
-				shopObjects : [
-									{id:1,
-									image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-									title:'Title1',
-									rating:3,
-									price:'5 $',
-									stare : true, class : "Men" , category : 'Shoes'
-									},
-									{id:2,
-									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-									title:'Title2',
-									rating:4,
-									price:'6 $',
-									stare : true, class : "Men" , category : 'Shoes'
-
-									},
-									{id:3,
-									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-									 title:'Title3',
-									 rating:2,
-									price:'7 $',
-									stare : true, class : "Ladies" , category : 'Shoes'
-
-									},
-									{id:4,
-									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-									 title:'Titl4',
-									 rating:2,
-									price:'8 $',
-									stare : true, class : "Ladies" , category : 'Shoes'
-
-								},
-									{id:5,
-									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-									title:'9 $',
-									rating:4,
-									price:'price5',
-									stare : true, class : "Ladies" , category : 'Shoes'
-
-									},
-									{id:6,
-									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-									 title:'Title6',
-									 rating:2,
-									price:'10 $',
-									stare : true, class : "Ladies" , category : 'Tops'
-
-								},
-								{id:7,
-								 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-								 title:'Title7',
-								 rating:2,
-								price:'11 $',
-								stare : true, class : "Ladies" , category : 'Tops'
-
-							},{id:8,
-							 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-							 title:'Title8',
-							 rating:3,
-							price:'12 $',
-							stare : true, class : "Ladies" , category : 'Tops'
-
-							}]
-					});
+				if(this.props.item){
+					console.log(this.props.item.items);
+						this.setState({
+			 shopObjects : this.props.item.items
+		 })
+		 }
 		}
 
 	}
@@ -192,9 +138,35 @@ handlePictureSelected(event) {
 	}
 	enableEditing=()=>{
 		this.nameRef.current.disabled = false;
-		this.emailRef.current.disabled = false;
+		this.genderRef1.current.disabled = false;
+		this.genderRef2.current.disabled = false;
 		this.workRef.current.disabled = false;
 	}
+	saveChanges=()=>{
+		// Headers
+		const config = {
+			headers: {
+				"Content-Type":"application/json",
+				 "x-auth-token": this.props.token,
+				 "user": this.props.user,
+			 }
+		};
+
+		// Request body
+		const {gender,userName } = this.state;
+		const body = JSON.stringify({gender,userName });
+
+		axios
+		 .put('/api/auth/updateInf',body, config)
+		 .then(response =>{
+			 console.log(response);
+		 }
+		 )
+		 .catch(error => console.log(error));
+	}
+	onChange = e => {
+				this.setState({ [e.target.name]: e.target.value });
+			};
 	viewShopPage=(shopObject)=>{
 		var index = this.state.shopObjects.indexOf(shopObject);
    		 if (index > -1) {
@@ -216,15 +188,7 @@ handlePictureSelected(event) {
 
     }
 	renderData=()=>{
-		const user = this.props.user;
-		let name = "userName";
-		let email = "email";
-		let pass = "pass";
-if(user !== null) {
-name = user.userName;
-email = user.emailORphone;
-pass = user.gender;
-}
+
 		if(this.state.data === "Password"){
 		return(	<div>
 				<h3>Change Password</h3>
@@ -242,6 +206,22 @@ pass = user.gender;
                 </div>)
 		}
 		if(this.state.data === "Profile"){
+			const user = this.props.user;
+			let name = "userName";
+			let email = "email";
+			let pass = "pass";
+	if(user !== null) {
+	name = user.userName;
+	email = user.emailORphone;
+	pass = user.gender;
+	if(pass==="female"){
+		//this.setState({gender: "female"});
+		document.getElementById("female").checked = true;
+	} else if(pass==="male"){
+		//this.setState({gender: "female"});
+		document.getElementById("male").checked = true;
+	}
+	}
 		return(	<div>
 				<div>
 				<h3 className="d-inline">My Profile</h3>
@@ -249,17 +229,21 @@ pass = user.gender;
 				<i className="fa fa-pencil"></i>Edit</button>
 				</div>
 				<label htmlFor="userName">User Name</label>
-				<input disabled ref={this.nameRef} type="text" id="userName" className="form-control" placeholder="User Name" value={name}></input>
+				<input disabled ref={this.nameRef} type="text"
+				name="userName"
+				onChange={this.onChange} id="userName" className="form-control" placeholder="User Name" value={name}></input>
 			    <label htmlFor="email">Email</label>
                 <input disabled ref={this.emailRef} type="email"id="email" className="form-control" placeholder="name@example.com" value={email}></input>
                 <label htmlFor="Work">Work</label>
                 <input disabled ref={this.workRef} type="text"id="Work" className="form-control" placeholder="-" value={pass}></input>
                 <label className="pr-3">Gender:</label>
-                <input type="radio" id="male" name="gender" value="male"></input>
+                <input disabled ref={this.genderRef1}  type="radio" id="male" name="gender" value="male"
+	              onChange={this.onChange}></input>
 				<label className="pr-2" htmlFor="male">Male</label>
-				<input type="radio" id="female" name="gender" value="female"></input>
+				<input disabled ref={this.genderRef2} type="radio" id="female" name="gender" value="female"
+				onChange={this.onChange}></input>
 				<label htmlFor="female">Female</label><br/>
-				<div><button className="btn btn-outline-dark float-right my-4">Save Changes</button></div>
+				<div><button className="btn btn-outline-dark float-right my-4" onClick={this.saveChanges}>Save Changes</button></div>
                 </div>)
 		}
 		if(this.state.data === "Favourites"){
@@ -352,15 +336,18 @@ renderPreview() {
 	}
 
 	UserProfile.propTypes = {
-	  loadUser: PropTypes.func.isRequired
+	  loadUser: PropTypes.func.isRequired,
+		getItems: PropTypes.func.isRequired,
+	  item: PropTypes.object.isRequired
 	};
 
 	const mapStateToProps = state => ({
 		user: state.auth.user,
-		token : state.auth.token
+		token : state.auth.token,
+		item: state.item
 	});
 
 	export default connect(
 	  mapStateToProps,
-	  { loadUser }
+	  { loadUser , getItems}
 	)(UserProfile);

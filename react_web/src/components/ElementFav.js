@@ -56,10 +56,10 @@ render(){
            <div className="item-box-blog-class bg-blue-ui white">
             <span className="mon">{this.props.shopObject.class}</span> </div>
           <figure> <img alt=""className="pt-1" style={{height:'200px'}}
-          src={this.props.shopObject.image}/> </figure>
+          src={this.props.shopObject.mainPic}/> </figure>
         </div>
         <div className="item-box-blog-body">
-        <Card.Title>{this.props.shopObject.title}
+        <Card.Title>{this.props.shopObject.name}
                   {this.renderButtons()}
                   </Card.Title>
 

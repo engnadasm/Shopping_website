@@ -15,7 +15,11 @@ import { addItem } from '../actions/itemActions';
 class ItemModal extends Component {
   state = {
     modal: false,
-    name: ''
+    name: '',
+    price : 5,
+    class: '',
+    category: '',
+    quantity: 6
   };
 
   toggle = () => {
@@ -32,7 +36,11 @@ class ItemModal extends Component {
     e.preventDefault();
 
     const newItem = {
-      name: this.state.name
+      name: this.state.name,
+      price : this.state.price,
+      class: this.state.class,
+      category: this.state.category,
+      quantity: this.state.quantity
     };
 
     // Add item via addItem action
@@ -62,6 +70,20 @@ class ItemModal extends Component {
                 <Input
                   type="text"
                   name="name"
+                  id="item"
+                  placeholder="Add shopping item"
+                  onChange={this.onChange}
+                />
+                <Input
+                  type="text"
+                  name="class"
+                  id="item"
+                  placeholder="Add shopping item"
+                  onChange={this.onChange}
+                />
+                <Input
+                  type="text"
+                  name="category"
                   id="item"
                   placeholder="Add shopping item"
                   onChange={this.onChange}

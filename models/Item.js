@@ -24,19 +24,27 @@ const ItemSchema = new Schema({
   },
   mainPic: {
     type: String,
-    default: "no photo"
+    default: "https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg"
   },
   Pic: {
     type: String,
-    default: "no photo"
+    default: "https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg"
   },
   quantity: {
     type: Number,
     required: true
   },
+  rating: {
+    type: Number,
+    default: 1
+  },
   date: {
     type: Date,
     default: Date.now
+  },
+  stare:{
+    type: Boolean,
+    default: false
   },
   reviews:[{
         text:String,

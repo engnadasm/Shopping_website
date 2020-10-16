@@ -7,7 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import history from './../history';
 
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getItems } from '../actions/itemActions';
+
 class Service extends Component {
+  componentDidMount() {
+    this.props.getItems();
+  }
        constructor() {
             super()
 
@@ -110,9 +117,11 @@ class Service extends Component {
   }
 
   render(){
+    const it = this.props.item.items;
+
   return (
     <Carousel className = "p-3"onSelect={this.handleNext} onClick={this.handleNext}id="shoppingList" >
-{this.state.shopObjects.slice(0,3).map(shopObject =>
+{it.slice(0,3).map(shopObject =>
   <Carousel.Item key={shopObject.id + 20}>
   <div className="row d-flex justify-content-center">
   <div className="col-md-10">
@@ -121,7 +130,7 @@ class Service extends Component {
   <ElementHome key={shopObject.id} shopObject={shopObject} onClick={this.viewShopPage}
           isStarred={shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
 
-  {this.state.shopObjects.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
+  {it.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
     <ElementHome key={shopObject1.id} shopObject={shopObject1} onClick={this.viewShopPage}
           isStarred={shopObject1.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}
@@ -136,4 +145,16 @@ class Service extends Component {
   )}
 }
 
-export default Service
+Service.propTypes = {
+  getItems: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  item: state.item
+});
+
+export default connect(
+  mapStateToProps,
+  { getItems}
+)(Service);

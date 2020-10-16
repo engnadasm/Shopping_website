@@ -121,6 +121,19 @@ router.put('/updatepic',auth,(req,res)=>{
     })
 })
 
+router.put('/updateInf',auth,(req,res)=>{
+    User.findByIdAndUpdate(req.user.id,
+      {$set:{userName:req.body.userName,gender:req.body.gender}},
+      {new:true},
+        (err,result)=>{
+         if(err){
+             return res.status(422).json({error:"update canot post"})
+         }
+         res.json(result)
+    })
+})
+
+
 router.post('/reset-password',(req,res)=>{
      crypto.randomBytes(32,(err,buffer)=>{
          if(err){

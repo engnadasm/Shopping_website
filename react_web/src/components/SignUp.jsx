@@ -59,6 +59,7 @@ class SignUp extends Component {
         if (this.state.src) {
           return <img className="preview-img" alt="Preview"src={this.state.src} width="200" height="200" />;
         } else {
+          this.setState({ src: "http://simpleicon.com/wp-content/uploads/account.png" });
           return <img className="preview-img" src="http://simpleicon.com/wp-content/uploads/account.png" alt="Preview" width="200" height="200"/>;
         }
       }
@@ -197,12 +198,18 @@ class SignUp extends Component {
                   {this.state.errors["pass1"]}
                 </span>
  					    </div>
+
               <div className="form-group">
               <label className="pr-3">Gender:</label>
-              <input type="radio" id="male" name="gender" value="male"></input>
-            <label className="pr-2" htmlFor="male">Male</label>
-            <input type="radio" id="female" name="gender" value="female"></input>
-            <label htmlFor="female">Female</label>
+              <input type="radio" id="male2" name="gender" value="male"
+              onChange={this.onChange} required></input>
+            <label className="pr-2" htmlFor="male2">Male</label>
+            <input type="radio" id="female2" name="gender" value="female"
+            onChange={this.onChange}  required></input>
+            <label htmlFor="female2">Female</label>
+            <span style={{color: "red"}} className="invalid-message" id="gender2">
+            {this.state.errors["gender2"]}
+            </span>
             </div>
 
               <button className="btn btn-outline-dark float-right" type="submit"><i className="fa fa-sign-in"></i> Sign up</button>
@@ -278,10 +285,15 @@ class SignUp extends Component {
               </div>
               <div className="form-group">
               <label className="pr-3">Gender:</label>
-              <input type="radio" id="male" name="gender" value="male"></input>
-            <label className="pr-2" htmlFor="male">Male</label>
-            <input type="radio" id="female" name="gender" value="female"></input>
-            <label htmlFor="female">Female</label>
+              <input type="radio" id="male1" name="gender" value="male"
+              onChange={this.onChange} required></input>
+            <label className="pr-2" htmlFor="male1">Male</label>
+            <input type="radio" id="female1" name="gender" value="female"
+            onChange={this.onChange}  required></input>
+            <label htmlFor="female1">Female</label>
+            <span style={{color: "red"}} className="invalid-message" id="gender1">
+            {this.state.errors["gender1"]}
+            </span>
             </div>
               <button className="btn btn-outline-dark float-right" type="submit"><i className="fa fa-sign-in"></i> Sign up</button>
             </form>

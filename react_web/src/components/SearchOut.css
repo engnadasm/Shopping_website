@@ -92,12 +92,13 @@
                 left: 0;
                 opacity: 1;
                 text-align: center;
-                margin: 1px 10px;
+                margin: 1px 50px;
+                border-radius: 30px;
 
             }
 
            .add-to-cart .default-btn {
-                padding: 2px 25px;
+                padding: 2px 20px;
                 font-size: 14px;
             }
             .single-publication .category {
@@ -107,7 +108,7 @@
             .default-btn {
                 background-color: #0072ff;
                 color: #fff;
-                border: 1px solid #0072ff;
+                border: 1px solid #00c6ff;
                 display: inline-block;
                 padding: 10px 30px;
                 border-radius: 30px;
@@ -116,6 +117,7 @@
                 font-family: 'Open Sans', sans-serif;
             }
             a:hover {
+              background-color: #00c6ff;
                 color: #fff;
                 text-decoration: none;
             }
