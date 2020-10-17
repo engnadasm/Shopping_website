@@ -10,6 +10,7 @@ import StarRatings from 'react-star-ratings';
 import ReviewElem from './ReviewElem';
 import Carousel from 'react-bootstrap/Carousel';
 import CardDeck from 'react-bootstrap/CardDeck';
+import history from './../history';
 
 class ViewPage extends Component {
   constructor(props) {
@@ -97,7 +98,7 @@ class ViewPage extends Component {
         buttonStyle= {border:"none", color:"red", outline:"none"}
         buttonStyle2= {border:"none", color:"black", outline:"none"}
 
-        if (!this.props.isStarred ){return (<OverlayTrigger
+        if (!history.location.state.shop.stare ){return (<OverlayTrigger
                                                       placement="top"
                                                       overlay={
                                                         <Tooltip>
@@ -105,8 +106,8 @@ class ViewPage extends Component {
                                                         </Tooltip>
                                                       }
                                                     >
-                                                    <a className="btn float-left" href="#add"
-                                                    onClick={()=>this.props.onStare(this.props.shopObject)}>
+                                                    <a className="btn float-left" href=""
+                                                    onClick={()=>this.props.onStare(history.location.state.shop)}>
                                                     <AiTwotoneHeart  style={buttonStyle2}
                                                      size={30}/></a>
                                              </OverlayTrigger>)}
@@ -118,13 +119,14 @@ class ViewPage extends Component {
                                                         </Tooltip>
                                                       }
                                                     >
-                                                    <a className="btn float-left"href="#remove"
-                                                    onClick={()=>this.props.onRemove(this.props.shopObject)}>
+                                                    <a className="btn float-left"href=""
+                                                    onClick={()=>this.props.onRemove(history.location.state.shop)}>
                                                     <AiTwotoneHeart  style={buttonStyle}
                                                      size={30}/></a>
                                                     </OverlayTrigger>)}
       }
   render() {
+    console.log(history);
     return (
       <div className="container">
   <div className="card">
@@ -133,27 +135,27 @@ class ViewPage extends Component {
         <div className="preview col-md-6">
 
           <div className="preview-pic tab-content">
-            <div className="tab-pane active" id="pic-1"><img alt="imagePic" src={this.props.shopObject.image} /></div>
-            <div className="tab-pane" id="pic-2"><img alt="imagePic" src={this.props.shopObject.image} /></div>
+            <div className="tab-pane active" id="pic-1"><img alt="imagePic" src={history.location.state.shop.mainPic} /></div>
+            <div className="tab-pane" id="pic-2"><img alt="imagePic" src={history.location.state.shop.mainPic} /></div>
             <div className="tab-pane" id="pic-3"><img alt="imagePic" src="http://placekitten.com/400/252" /></div>
-            <div className="tab-pane" id="pic-4"><img alt="imagePic" src={this.props.shopObject.image} /></div>
+            <div className="tab-pane" id="pic-4"><img alt="imagePic" src={history.location.state.shop.mainPic} /></div>
             <div className="tab-pane" id="pic-5"><img alt="imagePic" src="http://placekitten.com/400/252" /></div>
           </div>
           <ul className="preview-thumbnail nav nav-tabs">
-            <li className="active"><a href="#pic1" data-target="#pic-1" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
-            <li><a href="#pic2" data-target="#pic-2" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
+            <li className="active"><a href="#pic1" data-target="#pic-1" data-toggle="tab"><img alt="imagePic" src={history.location.state.shop.mainPic} /></a></li>
+            <li><a href="#pic2" data-target="#pic-2" data-toggle="tab"><img alt="imagePic" src={history.location.state.shop.mainPic} /></a></li>
             <li><a href="#pic3"data-target="#pic-3" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
-            <li><a href="#pic4" data-target="#pic-4" data-toggle="tab"><img alt="imagePic" src={this.props.shopObject.image} /></a></li>
+            <li><a href="#pic4" data-target="#pic-4" data-toggle="tab"><img alt="imagePic" src={history.location.state.shop.mainPic} /></a></li>
             <li><a href="#pic5" data-target="#pic-5" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
           </ul>
 
         </div>
         <div className="details col-md-6">
-          <h3 className="product-title">{this.props.shopObject.title}</h3>
+          <h3 className="product-title">{history.location.state.shop.name}</h3>
           <div className="rating">
           <div className="float-left">
              <StarRatings
-              rating={this.props.shopObject.rating}
+              rating={history.location.state.shop.rating}
               starRatedColor="yellow"
               starDimension="25px"
               numberOfStars={5}
@@ -165,12 +167,12 @@ class ViewPage extends Component {
           </div>
 
           <p><FaTags/> Tags: <a href="#tagOfClass">
-          <span className="badge badge-info">{this.props.shopObject.class}</span></a>&emsp;
+          <span className="badge badge-info">{history.location.state.shop.class}</span></a>&emsp;
            <a href="#tagOfCategory">
-          <span className="badge badge-info">{this.props.shopObject.category}</span></a>
+          <span className="badge badge-info">{history.location.state.shop.category}</span></a>
           </p>
 
-          <h4 className="price">current price: <span>{this.props.shopObject.price}</span></h4>
+          <h4 className="price">current price: <span>{history.location.state.shop.price}</span></h4>
           <p className="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
           <h5 className="sizes">sizes:
             <span className="size" data-toggle="tooltip" title="small">s</span>
@@ -183,11 +185,12 @@ class ViewPage extends Component {
             <span className="color green"></span>
             <span className="color blue"></span>
           </h5>
-          <div className="action">
-            <button className="add-to-cart btn btn-default"
-             onClick={()=>this.props.addCart(this.props.shopObject)}  >
-             <FaShoppingCart className="pb-1" size="25"/>add to cart</button>
-          </div>
+
+          { !history.location.state.shop.cart ?   <div className="action">
+              <button className="add-to-cart btn btn-default"
+               onClick={()=>this.props.addCart(history.location.state.shop)}  >
+               <FaShoppingCart className="pb-1" size="25"/>add to cart</button>
+            </div> : null }
           {this.renderButtons()}
 
         </div>
@@ -203,7 +206,7 @@ class ViewPage extends Component {
               <div className="justify-content-center">
 
                  <StarRatings
-                  rating={this.props.shopObject.rating}
+                  rating={history.location.state.shop.rating}
                   starRatedColor="yellow"
                   starDimension="23px"
                   numberOfStars={5}

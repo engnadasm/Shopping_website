@@ -84,23 +84,23 @@ class SearchOut extends Component {
           stare : false, class : "Ladies" , category : 'Tops'
 
         }],
-            options1 : [
+    options1 : [
                           { value: 'Ladies', label: 'Ladies' },
                           { value: 'Men', label: 'Men' },
                           { value: 'Kids', label: 'Kids' },
                           { value: 'All', label: 'All' }
 
                         ],
-                        options2:[
+    options2:[
                                       { value: 'Ladies', label: 'Ladies' },
                                       { value: 'Men', label: 'Men' },
                                       { value: 'Kids', label: 'Kids' },
                                       { value: 'All', label: 'All' }
 
                                     ],
-            page : 0,
-            isLoaded: false
-        }
+    page : 0,
+    isLoaded: false
+  }
 
         this.addItem = this.addItem.bind(this);
 
@@ -243,7 +243,6 @@ class SearchOut extends Component {
 
   render() {
     const it = this.props.item.items;
-    let g = [];
 
     if(this.props.user != null){
     console.log(this.props.user);

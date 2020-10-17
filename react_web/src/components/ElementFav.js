@@ -28,7 +28,7 @@ super();
                                                           </Tooltip>
                                                         }
                                                       >
-                                                        <AiTwotoneHeart className="float-right" style={buttonStyle2}
+                                                        <AiTwotoneHeart className="float-right" style={buttonStyle2} 
                                                         onClick={()=>this.props.onStare(this.props.shopObject)} size={25}/>
                                                </OverlayTrigger>)}
          else { return (<OverlayTrigger

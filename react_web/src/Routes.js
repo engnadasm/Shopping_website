@@ -12,7 +12,18 @@ import ShoppingList from './components/ShoppingList'
 
 import history from './history';
 
-export default class Routes extends Component {
+import { loadUser} from './actions/authActions';
+import axios from "axios";
+
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getItems } from './actions/itemActions';
+
+class Routes extends Component {
+  componentDidMount() {
+    this.props.loadUser();
+    this.props.getItems();
+  }
   constructor(props) {
         super()
         this.state = {
@@ -34,18 +45,100 @@ export default class Routes extends Component {
    onOpenModalLogin = () => {
       this.setState({ showLogin: true });
   };
+
   removeItem=(shopObject)=>{
+    console.log("Remove...");
+    console.log("id" + shopObject._id);
       shopObject.stare = false
+      history.push({
+          pathname: '/ViewPage',
+          state: { shop : shopObject }}
+        );
+      // Headers
+      const config = {
+        headers: {
+          "Content-Type":"application/json",
+           "x-auth-token": this.props.token,
+           "user": this.props.user,
+         }
+      };
+
+      // Request body
+    //	const {gender,userName } = this.state;
+      const body = JSON.stringify({shopObject});
+
+      axios
+       .put('/api/auth/unfavorite',body, config)
+       .then(response =>{
+         console.log(response);
+       }
+       )
+       .catch(error => console.log(error));
   }
 
   addItem=(shopObjects)=>{
+    console.log("add...");
+    console.log("id" + shopObjects._id);
     shopObjects.stare = true
-  }
-  addToCart=(shopObjects)=>{
-    history.push('/Cart')
+    console.log(shopObjects);
+    history.push({
+        pathname: '/ViewPage',
+        state: { shop : shopObjects }}
+      );
+      console.log("finish");
+    // Headers
+    const config = {
+      headers: {
+        "Content-Type":"application/json",
+         "x-auth-token": this.props.token,
+         "user": this.props.user,
+       }
+    };
+
+    // Request body
+  //	const {gender,userName } = this.state;
+    const body = JSON.stringify({shopObjects});
+
+    axios
+     .put('/api/auth/favorite',body, config)
+     .then(response =>{
+       console.log(response);
+     }
+     )
+     .catch(error => console.log(error));
+
 
   }
+
+  addToCart=(shopObjects)=>{
+    console.log("addToCart...");
+    console.log("id" + shopObjects._id);
+    // Headers
+    const config = {
+      headers: {
+        "Content-Type":"application/json",
+         "x-auth-token": this.props.token,
+         "user": this.props.user,
+       }
+    };
+
+    // Request body
+  //	const {gender,userName } = this.state;
+    const body = JSON.stringify({shopObjects});
+
+    axios
+     .put('/api/auth/cart',body, config)
+     .then(response =>{
+       console.log(response);
+     }
+     )
+     .catch(error => console.log(error));
+
+    history.push('/Cart')
+  }
+
     render() {
+      console.log(this.props);
         return (
             <Router history={history}>
                 <Switch>
@@ -55,13 +148,27 @@ export default class Routes extends Component {
                     <Route path="/UserProfile" component={UserProfile} />
                     <Route path="/ShoppingList" component={ShoppingList} />
                     <Route path="/Cart" component={Cart} />
-                    <Route path="/SearchOut" component={() => <SearchOut shopObject={this.state.shopObject}
-                    isStarred={this.state.shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>} />
-                    <Route path="/ViewPage" component={() => <ViewPage shopObject={this.state.shopObject}
-                    isStarred={this.state.shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>} />
+                    <Route path="/SearchOut" component={() => <SearchOut />} />
+                    <Route path="/ViewPage" component={() => <ViewPage  onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>} />
 
                 </Switch>
             </Router>
         )
     }
 }
+Routes.propTypes = {
+  loadUser: PropTypes.func.isRequired,
+  getItems: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  token : state.auth.token,
+  item: state.item
+});
+
+export default connect(
+  mapStateToProps,
+  {loadUser ,  getItems}
+)(Routes);

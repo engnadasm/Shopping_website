@@ -97,8 +97,11 @@ class Service extends Component {
           console.log("viewShopPage...");
           console.log("id" + shopObject._id);
 
-          history.push('/ViewPage')
-
+console.log(history);
+        history.push({
+            pathname: '/ViewPage',
+            state: { shop : shopObject }}
+          );
         }
 
         removeItem=(shopObject)=>{
