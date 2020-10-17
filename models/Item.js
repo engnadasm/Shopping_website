@@ -46,6 +46,10 @@ const ItemSchema = new Schema({
     type: Boolean,
     default: false
   },
+  cart:{
+    type: Boolean,
+    default: false
+  },
   reviews:[{
         text:String,
         postedBy:{type:ObjectId,ref:"user"}

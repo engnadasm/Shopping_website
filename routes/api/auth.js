@@ -60,8 +60,9 @@ router.get('/user', auth, (req, res) => {
 });
 
 router.put('/favorite',auth,(req,res)=>{
+  console.log(req.body);
     User.findByIdAndUpdate(req.user.id,{
-        $push:{favorite:req.body.item._id}
+        $push:{favorite:req.body.shopObjects._id}
     },{
         new:true
     },(err,result)=>{
@@ -72,8 +73,9 @@ router.put('/favorite',auth,(req,res)=>{
     )
 })
 router.put('/unfavorite',auth,(req,res)=>{
+  console.log(req.body);
     User.findByIdAndUpdate(req.user.id,{
-        $pull:{favorite:req.body.item._id}
+        $pull:{favorite:req.body.shopObject._id}
     },{
         new:true
     },(err,result)=>{
@@ -85,8 +87,9 @@ router.put('/unfavorite',auth,(req,res)=>{
 })
 
 router.put('/cart',auth,(req,res)=>{
+  console.log(req.body);
     User.findByIdAndUpdate(req.user.id,{
-        $push:{cart:req.body.item._id}
+        $push:{cart:req.body.shopObjects._id}
     },{
         new:true
     },(err,result)=>{
@@ -98,7 +101,7 @@ router.put('/cart',auth,(req,res)=>{
 })
 router.put('/uncart',auth,(req,res)=>{
     User.findByIdAndUpdate(req.user.id,{
-        $pull:{cart:req.body.item._id}
+        $pull:{cart:req.body.shopObject._id}
     },{
         new:true
     },(err,result)=>{

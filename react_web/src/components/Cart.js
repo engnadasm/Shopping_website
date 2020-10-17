@@ -4,12 +4,15 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import { FaShoppingCart,FaPlay } from "react-icons/fa";
 import ElementCart from "./ElementCart";
 import history from './../history';
-
+import axios from "axios";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getItems } from '../actions/itemActions';
+import { loadUser} from '../actions/authActions';
+
 class Cart extends Component {
   componentDidMount() {
+    this.props.loadUser();
     this.props.getItems();
   }
   constructor() {
@@ -50,12 +53,30 @@ class Cart extends Component {
         };
     }
     removeItem=(shopObject)=>{
-        var newShopObjects = [...this.state.shopObjects];
-        var index = newShopObjects.indexOf(shopObject);
-       if (index > -1) {
-        newShopObjects.splice(index, 1);
-          this.setState({shopObjects: newShopObjects});
-       }
+      console.log(shopObject);
+      console.log("Remove...");
+      console.log("id" + shopObject._id);
+        // Headers
+        const config = {
+          headers: {
+            "Content-Type":"application/json",
+             "x-auth-token": this.props.token,
+             "user": this.props.user,
+           }
+        };
+
+        // Request body
+      //	const {gender,userName } = this.state;
+        const body = JSON.stringify({shopObject});
+
+        axios
+         .put('/api/auth/uncart',body, config)
+         .then(response =>{
+           console.log(response);
+         }
+         )
+         .catch(error => console.log(error));
+         history.push('/Cart')
 
     }
 
@@ -64,7 +85,24 @@ class Cart extends Component {
     }
   render() {
     const it = this.props.item.items;
+    let g = [];
 
+    if(this.props.user != null){
+    console.log(this.props.user);
+
+    const cart = this.props.user.cart;
+    console.log(cart);
+    console.log(it);
+    if(it.length !== 0){
+
+    let  found;
+    for(let i=0;i<cart.length;i++){
+      found = it.find(element => element._id === cart[i]);
+      g[i] = found;
+    }
+  }
+    console.log(g);
+}
     return (
       <div className="container">
 
@@ -81,8 +119,8 @@ class Cart extends Component {
                       </tr>
                   </thead>
                   <tbody>
-                  {it.map(shopObject =>
-              		  <ElementCart key={shopObject.id} shopObject={shopObject} onRemove={this.removeItem}/>
+                  {g.map(shopObject =>
+              		  <ElementCart key={shopObject._id} shopObject={shopObject} onRemove={this.removeItem}/>
               		 )}
 
                       <tr>
@@ -134,15 +172,18 @@ class Cart extends Component {
 }
 
 Cart.propTypes = {
+  loadUser: PropTypes.func.isRequired,
   getItems: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  user: state.auth.user,
+  token : state.auth.token,
   item: state.item
 });
 
 export default connect(
   mapStateToProps,
-  { getItems}
+  {loadUser ,  getItems}
 )(Cart);

@@ -82,10 +82,10 @@ render(){
                                <h4 className="price">{this.props.shopObject.price}<span>$299</span></h4>
                            </div>
 
-
-                           <div className="add-to-cart">
+                           { !this.props.shopObject.cart ? <div className="add-to-cart">
                                <a href="#addCart" className="default-btn" onClick={()=>this.props.addCart(this.props.shopObject)}>Add to Cart</a>
-                           </div>
+                           </div> : null }
+
                        </div>
 
   	</div>

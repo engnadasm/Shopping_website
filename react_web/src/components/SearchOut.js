@@ -6,12 +6,17 @@ import { FaSearch } from "react-icons/fa";
 import ElementHome from './ElementSearch';
 import history from './../history';
 
+import { loadUser} from '../actions/authActions';
+import axios from "axios";
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getItems } from '../actions/itemActions';
+
 class SearchOut extends Component {
   componentDidMount() {
     this.props.getItems();
+    this.props.loadUser();
   }
   constructor(){
   super();
@@ -101,23 +106,86 @@ class SearchOut extends Component {
 
        }
 
-        removeItem=(shopObject)=>{
-          console.log("Remove...");
-            shopObject.stare = false
-        }
+       removeItem=(shopObject)=>{
+         console.log("Remove...");
+         console.log("id" + shopObject._id);
+           shopObject.stare = false
+           // Headers
+           const config = {
+             headers: {
+               "Content-Type":"application/json",
+                "x-auth-token": this.props.token,
+                "user": this.props.user,
+              }
+           };
 
-        addItem=(shopObjects)=>{
-          shopObjects.stare = true;
-          this.addItem = this.addItem.bind(this);
-          console.log("add...");
+           // Request body
+         //	const {gender,userName } = this.state;
+           const body = JSON.stringify({shopObject});
 
+           axios
+            .put('/api/auth/unfavorite',body, config)
+            .then(response =>{
+              console.log(response);
+            }
+            )
+            .catch(error => console.log(error));
+       }
 
-        }
-        addToCart=(shopObjects)=>{
-          console.log("addToCart...");
-          history.push('/Cart')
+       addItem=(shopObjects)=>{
+         console.log("add...");
+         console.log("id" + shopObjects._id);
+         shopObjects.stare = true
 
-        }
+         // Headers
+         const config = {
+           headers: {
+             "Content-Type":"application/json",
+              "x-auth-token": this.props.token,
+              "user": this.props.user,
+            }
+         };
+
+         // Request body
+       //	const {gender,userName } = this.state;
+         const body = JSON.stringify({shopObjects});
+
+         axios
+          .put('/api/auth/favorite',body, config)
+          .then(response =>{
+            console.log(response);
+          }
+          )
+          .catch(error => console.log(error));
+
+       }
+
+       addToCart=(shopObjects)=>{
+         console.log("addToCart...");
+         console.log("id" + shopObjects._id);
+         // Headers
+         const config = {
+           headers: {
+             "Content-Type":"application/json",
+              "x-auth-token": this.props.token,
+              "user": this.props.user,
+            }
+         };
+
+         // Request body
+       //	const {gender,userName } = this.state;
+         const body = JSON.stringify({shopObjects});
+
+         axios
+          .put('/api/auth/cart',body, config)
+          .then(response =>{
+            console.log(response);
+          }
+          )
+          .catch(error => console.log(error));
+
+         history.push('/Cart')
+       }
     viewShopPage=(shopObject)=>{
         console.log("clicked-----------------------")
         history.push('/ViewPage')
@@ -172,9 +240,33 @@ class SearchOut extends Component {
     }
    handleChange2 = (selectedOption2) => {
     }
-    
+
   render() {
     const it = this.props.item.items;
+    let g = [];
+
+    if(this.props.user != null){
+    console.log(this.props.user);
+
+    const cart = this.props.user.favorite;
+    const favorite = this.props.user.cart;
+
+    console.log(cart);
+    console.log(it);
+    if(it.length !== 0){
+
+    let  found;
+    for(let i=0;i<cart.length;i++){
+      found = it.findIndex(element => element._id === cart[i]);
+      it[found].stare = true;
+    }
+    for(let i=0;i<favorite.length;i++){
+      found = it.findIndex(element => element._id === favorite[i]);
+      it[found].cart = true;
+    }
+    }
+    console.log(it);
+    }
 
     const animatedComponents = makeAnimated();
     return (
@@ -304,7 +396,7 @@ class SearchOut extends Component {
 
   <header className="border-bottom mb-4 pb-3">
   		<div className="form-inline">
-  			<span className="mr-md-auto">{this.state.shopObjects.length} Items found </span>
+  			<span className="mr-md-auto">{it.length} Items found </span>
   			<select className="mr-2 form-control">
   				<option>Latest items</option>
   				<option>Highest Rating</option>
@@ -315,7 +407,7 @@ class SearchOut extends Component {
 
   <div className="row">
   {it.map(shopObject1 =>
-    <ElementHome key={shopObject1.id} shopObject={shopObject1} onClick={this.viewShopPage}
+    <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage}
           isStarred={shopObject1.stare} onStare={()=>this.addItem(shopObject1)} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}
 
@@ -339,15 +431,18 @@ class SearchOut extends Component {
   }
 }
 SearchOut.propTypes = {
+  loadUser: PropTypes.func.isRequired,
   getItems: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  user: state.auth.user,
+  token : state.auth.token,
   item: state.item
 });
 
 export default connect(
   mapStateToProps,
-  { getItems}
+  {loadUser ,  getItems}
 )(SearchOut);

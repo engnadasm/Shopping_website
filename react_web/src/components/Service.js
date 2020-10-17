@@ -7,12 +7,16 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import history from './../history';
 
+import { loadUser} from '../actions/authActions';
+import axios from "axios";
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getItems } from '../actions/itemActions';
 
 class Service extends Component {
   componentDidMount() {
+    this.props.loadUser();
     this.props.getItems();
   }
        constructor() {
@@ -91,20 +95,90 @@ class Service extends Component {
 
         viewShopPage=(shopObject)=>{
           console.log("viewShopPage...");
+          console.log("id" + shopObject._id);
+
           history.push('/ViewPage')
 
         }
+
         removeItem=(shopObject)=>{
           console.log("Remove...");
+          console.log("id" + shopObject._id);
             shopObject.stare = false
+            // Headers
+        		const config = {
+        			headers: {
+        				"Content-Type":"application/json",
+        				 "x-auth-token": this.props.token,
+        				 "user": this.props.user,
+        			 }
+        		};
+
+        		// Request body
+        	//	const {gender,userName } = this.state;
+        		const body = JSON.stringify({shopObject});
+
+        		axios
+        		 .put('/api/auth/unfavorite',body, config)
+        		 .then(response =>{
+        			 console.log(response);
+        		 }
+        		 )
+        		 .catch(error => console.log(error));
         }
 
         addItem=(shopObjects)=>{
           console.log("add...");
+          console.log("id" + shopObjects._id);
           shopObjects.stare = true
+
+          // Headers
+      		const config = {
+      			headers: {
+      				"Content-Type":"application/json",
+      				 "x-auth-token": this.props.token,
+      				 "user": this.props.user,
+      			 }
+      		};
+
+      		// Request body
+      	//	const {gender,userName } = this.state;
+      		const body = JSON.stringify({shopObjects});
+
+      		axios
+      		 .put('/api/auth/favorite',body, config)
+      		 .then(response =>{
+      			 console.log(response);
+      		 }
+      		 )
+      		 .catch(error => console.log(error));
+
         }
+
         addToCart=(shopObjects)=>{
           console.log("addToCart...");
+          console.log("id" + shopObjects._id);
+          // Headers
+          const config = {
+            headers: {
+              "Content-Type":"application/json",
+               "x-auth-token": this.props.token,
+               "user": this.props.user,
+             }
+          };
+
+          // Request body
+        //	const {gender,userName } = this.state;
+          const body = JSON.stringify({shopObjects});
+
+          axios
+           .put('/api/auth/cart',body, config)
+           .then(response =>{
+             console.log(response);
+           }
+           )
+           .catch(error => console.log(error));
+
           history.push('/Cart')
         }
   handleNext=()=>{
@@ -118,11 +192,35 @@ class Service extends Component {
 
   render(){
     const it = this.props.item.items;
+let g = [];
+
+if(this.props.user != null){
+console.log(this.props.user);
+
+const cart = this.props.user.favorite;
+const favorite = this.props.user.cart;
+
+console.log(cart);
+console.log(it);
+if(it.length !== 0){
+
+let  found;
+for(let i=0;i<cart.length;i++){
+  found = it.findIndex(element => element._id === cart[i]);
+  it[found].stare = true;
+}
+for(let i=0;i<favorite.length;i++){
+  found = it.findIndex(element => element._id === favorite[i]);
+  it[found].cart = true;
+}
+}
+console.log(g);
+}
 
   return (
     <Carousel className = "p-3"onSelect={this.handleNext} onClick={this.handleNext}id="shoppingList" >
 {it.slice(0,3).map(shopObject =>
-  <Carousel.Item key={shopObject.id + 20}>
+  <Carousel.Item key={shopObject._id}>
   <div className="row d-flex justify-content-center">
   <div className="col-md-10">
   <CardDeck >
@@ -131,7 +229,7 @@ class Service extends Component {
           isStarred={shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
 
   {it.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
-    <ElementHome key={shopObject1.id} shopObject={shopObject1} onClick={this.viewShopPage}
+    <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage}
           isStarred={shopObject1.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}
 
@@ -146,15 +244,18 @@ class Service extends Component {
 }
 
 Service.propTypes = {
+  loadUser: PropTypes.func.isRequired,
   getItems: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  user: state.auth.user,
+  token : state.auth.token,
   item: state.item
 });
 
 export default connect(
   mapStateToProps,
-  { getItems}
+  {loadUser ,  getItems}
 )(Service);

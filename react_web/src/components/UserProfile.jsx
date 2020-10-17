@@ -94,11 +94,29 @@ handlePictureSelected(event) {
 	}
 	setFavourites=()=>{
 		this.setState({data : "Favourites"});
+		const it = this.props.user.favorite;
+		const cart = this.props.user.cart;
+
+		console.log(this.props.item.items);
+		console.log(it);
+		console.log(cart);
+
+		let g = [];
+		let  found;
 		if(this.state.shopObjects.length === 0){
 				if(this.props.item){
-					console.log(this.props.item.items);
+					for(let i=0;i<cart.length;i++){
+					  found = this.props.item.items.findIndex(element => element._id === cart[i]);
+					  this.props.item.items[found].cart = true;
+					}
+					for(let i=0;i<it.length;i++){
+					 	found = this.props.item.items.find(element => element._id == it[i]);
+						g[i] = found;
+					}
+					console.log(g);
+
 						this.setState({
-			 shopObjects : this.props.item.items
+			 shopObjects : g
 		 })
 		 }
 		}
@@ -174,17 +192,55 @@ handlePictureSelected(event) {
 			 }
     }
 		addToCart=(shopObjects)=>{
+			console.log("addToCart...");
+			console.log("id" + shopObjects._id);
+			// Headers
+			const config = {
+				headers: {
+					"Content-Type":"application/json",
+					 "x-auth-token": this.props.token,
+					 "user": this.props.user,
+				 }
+			};
+
+			// Request body
+		//	const {gender,userName } = this.state;
+			const body = JSON.stringify({shopObjects});
+
+			axios
+			 .put('/api/auth/cart',body, config)
+			 .then(response =>{
+				 console.log(response);
+			 }
+			 )
+			 .catch(error => console.log(error));
+
 			history.push('/Cart')
 		}
     removeItem=(shopObject)=>{
         console.log("remove-----------------------")
         console.log(shopObject)
-        var newShopObjects = [...this.state.shopObjects];
-        var index = newShopObjects.indexOf(shopObject);
-   		 if (index > -1) {
-   		 	newShopObjects.splice(index, 1);
-        	this.setState({shopObjects: newShopObjects});
-    	 }
+				console.log("id" + shopObject._id);
+					// Headers
+					const config = {
+						headers: {
+							"Content-Type":"application/json",
+							 "x-auth-token": this.props.token,
+							 "user": this.props.user,
+						 }
+					};
+
+					// Request body
+				//	const {gender,userName } = this.state;
+					const body = JSON.stringify({shopObject});
+
+					axios
+					 .put('/api/auth/unfavorite',body, config)
+					 .then(response =>{
+						 console.log(response);
+					 }
+					 )
+					 .catch(error => console.log(error));
 
     }
 	renderData=()=>{
@@ -252,8 +308,8 @@ handlePictureSelected(event) {
 				<h3>My Favourites</h3>
 
 		{this.state.shopObjects.slice(0,3).map(shopObject =>
-		  <ElementHome key={shopObject.id} shopObject={shopObject} onClick={this.viewShopPage}
-		          isStarred={shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
+		  <ElementHome key={shopObject._id} shopObject={shopObject} onClick={this.viewShopPage}
+		          isStarred={true} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
 
 		 )}
 

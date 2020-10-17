@@ -82,9 +82,9 @@ render(){
            <div className="mt1"> <button className="btn bg-blue-ui white read"
            onClick={()=>this.props.onClick(this.props.shopObject)}>View Details</button>
            </div>
-           <div className="mt2"> <button className="btn bg-blue-ui white read"
+           { !this.props.shopObject.cart ? <div className="mt2"> <button className="btn bg-blue-ui white read"
             onClick={()=>this.props.addCart(this.props.shopObject)} >Add To Cart</button>
-           </div>
+           </div> : null }
         </div>
       </div>
     </div>
