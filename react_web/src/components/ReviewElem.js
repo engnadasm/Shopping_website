@@ -12,42 +12,6 @@ class ReviewElem extends Component {
 super();
 }
 
-      renderButtons=()=>{
-          var buttonStyle;
-          var buttonStyle2;
-
-          buttonStyle= {border:"none", color:"red", outline:"none"}
-          buttonStyle2= {border:"none", color:"black", outline:"none"}
-
-          if (!this.props.isStarred ){return (<OverlayTrigger
-                                                        placement="top"
-                                                        overlay={
-                                                          <Tooltip>
-                                                            Add to <strong>my favourites</strong>.
-                                                          </Tooltip>
-                                                        }
-                                                      >
-                                                      <a className="btn float-right" href="#add"
-                                                      onClick={()=>this.props.onStare(this.props.shopObject)}>
-                                                      <AiTwotoneHeart  style={buttonStyle2}
-                                                       size={25}/></a>
-                                               </OverlayTrigger>)}
-         else { return (<OverlayTrigger
-                                                        placement="top"
-                                                        overlay={
-                                                          <Tooltip>
-                                                            Remove from <strong>my favourites</strong>.
-                                                          </Tooltip>
-                                                        }
-                                                      >
-                                                      <a className="btn float-right" href="#remove"
-                                                      onClick={()=>this.props.onRemove(this.props.shopObject)}>
-                                                      <AiTwotoneHeart  style={buttonStyle}
-                                                       size={25}/></a>
-                                                      </OverlayTrigger>)}
-        }
-
-
 render(){
   return (
     <div key={this.props.shopObject.id} className="col-md-4">

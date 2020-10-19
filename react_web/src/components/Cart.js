@@ -17,40 +17,7 @@ class Cart extends Component {
   }
   constructor() {
         super()
-        this.state = {
-            shopObjects : [
-    									{id:1,
-    									image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-    									title:'Title1',
-    									rating:3,
-    									price:'5 $',
-    									stare : true, class : "Men" , category : 'Shoes'
-    									},
-    									{id:2,
-    									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-    									title:'Title2',
-    									rating:4,
-    									price:'6 $',
-    									stare : true, class : "Men" , category : 'Shoes'
 
-    									},
-    									{id:3,
-    									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-    									 title:'Title3',
-    									 rating:2,
-    									price:'7 $',
-    									stare : true, class : "Ladies" , category : 'Shoes'
-
-    									},
-    									{id:4,
-    									 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-    									 title:'Titl4',
-    									 rating:2,
-    									price:'8 $',
-    									stare : true, class : "Ladies" , category : 'Shoes'
-
-    								}]
-        };
     }
     removeItem=(shopObject)=>{
       console.log(shopObject);
@@ -64,11 +31,9 @@ class Cart extends Component {
              "user": this.props.user,
            }
         };
-
         // Request body
       //	const {gender,userName } = this.state;
         const body = JSON.stringify({shopObject});
-
         axios
          .put('/api/auth/uncart',body, config)
          .then(response =>{
@@ -76,8 +41,6 @@ class Cart extends Component {
          }
          )
          .catch(error => console.log(error));
-         history.push('/Cart')
-
     }
 
     continuShopping=()=>{
@@ -86,7 +49,7 @@ class Cart extends Component {
   render() {
     const it = this.props.item.items;
     let g = [];
-
+    let totalPrice = 0;
     if(this.props.user != null){
     console.log(this.props.user);
 
@@ -99,6 +62,7 @@ class Cart extends Component {
     for(let i=0;i<cart.length;i++){
       found = it.find(element => element._id === cart[i]);
       g[i] = found;
+      totalPrice = totalPrice +  g[i].price;
     }
   }
     console.log(g);
@@ -120,7 +84,7 @@ class Cart extends Component {
                   </thead>
                   <tbody>
                   {g.map(shopObject =>
-              		  <ElementCart key={shopObject._id} shopObject={shopObject} onRemove={this.removeItem}/>
+              		  <ElementCart key={shopObject._id} shopObject={shopObject} onRemove={this.removeItem.bind(this)}/>
               		 )}
 
                       <tr>
@@ -128,7 +92,7 @@ class Cart extends Component {
                           <td>   </td>
                           <td>   </td>
                           <td><h5>Subtotal</h5></td>
-                          <td className="text-right"><h5><strong>$24.59</strong></h5></td>
+                          <td className="text-right"><h5><strong>{"$"+totalPrice}</strong></h5></td>
                       </tr>
                       <tr>
                           <td>   </td>
@@ -142,7 +106,7 @@ class Cart extends Component {
                           <td>   </td>
                           <td>   </td>
                           <td><h3>Total</h3></td>
-                          <td className="text-right"><h3><strong>$31.53</strong></h3></td>
+                          <td className="text-right"><h3><strong>{"$"+(totalPrice + 6.94)}</strong></h3></td>
                       </tr>
                       <tr>
                           <td>   </td>

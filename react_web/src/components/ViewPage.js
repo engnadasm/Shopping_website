@@ -12,7 +12,18 @@ import Carousel from 'react-bootstrap/Carousel';
 import CardDeck from 'react-bootstrap/CardDeck';
 import history from './../history';
 
+import { loadUser} from '../actions/authActions';
+import axios from "axios";
+
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getItems } from '../actions/itemActions';
+
 class ViewPage extends Component {
+  componentDidMount() {
+    this.props.loadUser();
+    this.props.getItems();
+  }
   constructor(props) {
         super()
         this.state = {
@@ -107,7 +118,7 @@ class ViewPage extends Component {
                                                       }
                                                     >
                                                     <a className="btn float-left" href=""
-                                                    onClick={()=>this.props.onStare(history.location.state.shop)}>
+                                                    onClick={()=>this.addItem(history.location.state.shop)}>
                                                     <AiTwotoneHeart  style={buttonStyle2}
                                                      size={30}/></a>
                                              </OverlayTrigger>)}
@@ -120,10 +131,101 @@ class ViewPage extends Component {
                                                       }
                                                     >
                                                     <a className="btn float-left"href=""
-                                                    onClick={()=>this.props.onRemove(history.location.state.shop)}>
+                                                    onClick={()=>this.removeItem(history.location.state.shop)}>
                                                     <AiTwotoneHeart  style={buttonStyle}
                                                      size={30}/></a>
                                                     </OverlayTrigger>)}
+      }
+
+      removeItem=(shopObject)=>{
+        console.log("Remove...");
+        console.log("id" + shopObject._id);
+          shopObject.stare = false
+          history.push({
+              pathname: '/ViewPage',
+              state: { shop : shopObject }}
+            );
+          // Headers
+          const config = {
+            headers: {
+              "Content-Type":"application/json",
+               "x-auth-token": this.props.token,
+               "user": this.props.user,
+             }
+          };
+
+          // Request body
+        //	const {gender,userName } = this.state;
+          const body = JSON.stringify({shopObject});
+
+          axios
+           .put('/api/auth/unfavorite',body, config)
+           .then(response =>{
+             console.log(response);
+           }
+           )
+           .catch(error => console.log(error));
+      }
+
+      addItem=(shopObjects)=>{
+        console.log("add...");
+        console.log("id" + shopObjects._id);
+        shopObjects.stare = true
+        console.log(shopObjects);
+        history.push({
+            pathname: '/ViewPage',
+            state: { shop : shopObjects }}
+          );
+          console.log("finish");
+        // Headers
+        const config = {
+          headers: {
+            "Content-Type":"application/json",
+             "x-auth-token": this.props.token,
+             "user": this.props.user,
+           }
+        };
+
+        // Request body
+      //	const {gender,userName } = this.state;
+        const body = JSON.stringify({shopObjects});
+
+        axios
+         .put('/api/auth/favorite',body, config)
+         .then(response =>{
+           console.log(response);
+         }
+         )
+         .catch(error => console.log(error));
+
+
+      }
+
+      addToCart=(shopObjects)=>{
+        console.log("addToCart...");
+        console.log("id" + shopObjects._id);
+        // Headers
+        const config = {
+          headers: {
+            "Content-Type":"application/json",
+             "x-auth-token": this.props.token,
+             "user": this.props.user,
+           }
+        };
+
+        // Request body
+      //	const {gender,userName } = this.state;
+        const body = JSON.stringify({shopObjects});
+
+        axios
+         .put('/api/auth/cart',body, config)
+         .then(response =>{
+           console.log(response);
+         }
+         )
+         .catch(error => console.log(error));
+
+        history.push('/Cart')
       }
   render() {
     console.log(history);
@@ -188,7 +290,7 @@ class ViewPage extends Component {
 
           { !history.location.state.shop.cart ?   <div className="action">
               <button className="add-to-cart btn btn-default"
-               onClick={()=>this.props.addCart(history.location.state.shop)}  >
+               onClick={()=>this.addToCart(history.location.state.shop)}  >
                <FaShoppingCart className="pb-1" size="25"/>add to cart</button>
             </div> : null }
           {this.renderButtons()}
@@ -307,12 +409,10 @@ class ViewPage extends Component {
   <div className="col-md-10">
   <CardDeck >
 
-  <ReviewElem key={shopObject.id} shopObject={shopObject} onClick={this.viewShopPage}
-        isStarred={shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
+  <ReviewElem key={shopObject.id} shopObject={shopObject} />
 
   {this.state.shopObjects.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
-  <ReviewElem key={shopObject1.id} shopObject={shopObject1} onClick={this.viewShopPage}
-        isStarred={shopObject1.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
+  <ReviewElem key={shopObject1.id} shopObject={shopObject1}/>
   )}
 
   </CardDeck>
@@ -332,4 +432,19 @@ class ViewPage extends Component {
   }
 }
 
-export default ViewPage;
+ViewPage.propTypes = {
+  loadUser: PropTypes.func.isRequired,
+  getItems: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  token : state.auth.token,
+  item: state.item
+});
+
+export default connect(
+  mapStateToProps,
+  {loadUser ,  getItems}
+)(ViewPage);
