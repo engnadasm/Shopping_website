@@ -33,9 +33,6 @@ class ItemModal extends Component {
 
                         ],
     options2:[
-                                      { value: 'Ladies', label: 'Ladies' },
-                                      { value: 'Men', label: 'Men' },
-                                      { value: 'Kids', label: 'Kids' },
                                       { value: 'All', label: 'All' }
 
                                     ],
@@ -142,7 +139,7 @@ class ItemModal extends Component {
        this.setState({ pic : this.state.pic + " "+ response.data.url });
       const data = response.data;
       const fileURL = data.secure_url // You should store this URL for future references in your app
-      
+
       console.log(this.state.pic );
     }).catch(error => console.log(error));
   }
@@ -219,13 +216,7 @@ class ItemModal extends Component {
                 <input type="file" multiple onChange={this.fileSelectedHandler} accept="image/*" />
 
                 <Label for="itemClass">Item class</Label>
-                <Input
-                  type="text"
-                  name="class"
-                  id="itemClass"
-                  placeholder="Add shopping item class"
-                  onChange={this.onChange}
-                />
+
                 <Select
               onChange={this.handleChange1}
               id = "exampleFormControlSelect1"
@@ -237,13 +228,7 @@ class ItemModal extends Component {
               classNamePrefix="select"
               />
                 <Label for="itemCategory">Item category</Label>
-                <Input
-                  type="text"
-                  name="category"
-                  id="itemCategory"
-                  placeholder="Item category"
-                  onChange={this.onChange}
-                />
+                
                 <Select
 onChange={this.handleChange2}
 id = "exampleFormControlSelect2"

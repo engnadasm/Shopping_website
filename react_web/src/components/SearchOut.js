@@ -186,10 +186,16 @@ class SearchOut extends Component {
 
          history.push('/Cart')
        }
-    viewShopPage=(shopObject)=>{
-        console.log("clicked-----------------------")
-        history.push('/ViewPage')
-    }
+       viewShopPage=(shopObject)=>{
+         console.log("viewShopPage...");
+         console.log("id" + shopObject._id);
+
+       history.push({
+           pathname: '/ViewPage',
+           state: { shop : shopObject, auth: this.props.auth }}
+         );
+       }
+
     handlePrevious=()=>{
       console.log("Previous-----------------------")
       if(this.state.page > 0){
@@ -242,14 +248,45 @@ class SearchOut extends Component {
     }
 
   render() {
-    const it = this.props.item.items;
+    let it = this.props.item.items;
+    const clas = history.location.state.class;
+    const category = history.location.state.category;
+    let  found;
 
+    if(clas !== "All") {
+      let g = [];
+      let j = 0;
+      for(let i=0;i<it.length;i++){
+        found = it.findIndex(element => element.class === clas);
+        if(it[i].class===clas) {
+        g[j] = it[i];
+        j++}
+      }
+      it = g;
+      console.log(g);
+      console.log(it);
+    }
+    if(category !== "All") {
+      let g = [];
+      let j = 0;
+      for(let i=0;i<it.length;i++){
+        if(it[i].category===category) {
+        g[j] = it[i];
+        j++}
+      }
+      it = g;
+      console.log(g);
+      console.log(it);
+
+    }
     if(this.props.user != null){
     console.log(this.props.user);
 
     const cart = this.props.user.favorite;
     const favorite = this.props.user.cart;
 
+    console.log(clas);
+    console.log(category);
     console.log(cart);
     console.log(it);
     if(it.length !== 0){
@@ -406,7 +443,7 @@ class SearchOut extends Component {
 
   <div className="row">
   {it.map(shopObject1 =>
-    <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage}
+    <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage} auth={this.props.auth}
           isStarred={shopObject1.stare} onStare={()=>this.addItem(shopObject1)} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}
 
@@ -438,7 +475,9 @@ SearchOut.propTypes = {
 const mapStateToProps = state => ({
   user: state.auth.user,
   token : state.auth.token,
-  item: state.item
+  item: state.item,
+  auth: state.auth
+
 });
 
 export default connect(

@@ -62,8 +62,10 @@ render(){
                                </a>
 
                                <ul>
-                                   <li><a href="#showStare">  {this.renderButtons()}</a></li>
-                                   <li><a href="#viewPage" title="Quick View" onClick={()=>this.props.onClick(this.props.shopObject)}><FaSearch/></a></li>
+                               { this.props.auth.isAuthenticated ?  <li><a href="#showStare">  {this.renderButtons()}</a></li> : null }
+
+
+                                   <li><a title="Quick View" onClick={()=>this.props.onClick(this.props.shopObject)}><FaSearch/></a></li>
                                </ul>
                            </figure>
 
@@ -81,11 +83,9 @@ render(){
 
                                <h4 className="price">{this.props.shopObject.price}<span>$299</span></h4>
                            </div>
-
-                           { !this.props.shopObject.cart ? <div className="add-to-cart">
+                           { this.props.auth.isAuthenticated ?  !this.props.shopObject.cart ? <div className="add-to-cart">
                                <a href="#addCart" className="default-btn" onClick={()=>this.props.addCart(this.props.shopObject)}>Add to Cart</a>
-                           </div> : null }
-
+                           </div> : null  : null }
                        </div>
 
   	</div>

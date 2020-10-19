@@ -16,7 +16,6 @@ super();
       renderButtons=()=>{
           var buttonStyle;
           var buttonStyle2;
-
           buttonStyle= {border:"none", color:"red", outline:"none"}
           buttonStyle2= {border:"none", color:"black", outline:"none"}
 
@@ -63,7 +62,8 @@ render(){
         </div>
         <div className="item-box-blog-body">
         <Card.Title>{this.props.shopObject.name}
-                  {this.renderButtons()}
+        { this.props.auth.isAuthenticated ? this.renderButtons() : null }
+
                   </Card.Title>
 
           <div className="item-box-blog-text">
@@ -85,9 +85,11 @@ render(){
            <div className="mt1"> <button className="btn bg-blue-ui white read"
            onClick={()=>this.props.onClick(this.props.shopObject)}>View Details</button>
            </div>
-            { !this.props.shopObject.cart ? <div className="mt2"> <button className="btn bg-blue-ui white read"
-             onClick={()=>this.props.addCart(this.props.shopObject)} >Add To Cart</button>
-            </div> : null }
+           { this.props.auth.isAuthenticated ?  !this.props.shopObject.cart ? <div className="mt2"> <button className="btn bg-blue-ui white read"
+            onClick={()=>this.props.addCart(this.props.shopObject)} >Add To Cart</button>
+           </div> : null : null }
+
+
 
         </div>
       </div>

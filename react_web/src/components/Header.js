@@ -21,14 +21,14 @@ function Header(props) {
 
               ];
 
-  const [selOp1, newSelOp1] = useState( { value: 'select Your Gender', label: 'Select Gender' })
-  const [selOp2, newSelOp2] = useState(  { value: 'select Category', label: 'Select Category' })
+  const [selOp1, newSelOp1] = useState( { value: 'All', label: 'Select Gender' })
+  const [selOp2, newSelOp2] = useState(  { value: 'All', label: 'Select Category' })
 
   const handleChange1 = (selectedOption1) => {
     if(isDisabled) {
       setDisabled(false);
     } else{
-      newSelOp1(selectedOption1.value)
+      newSelOp1(selectedOption1)
       }
       if(selectedOption1.value === 'Ladies'){
         newSelOp1(options1[0])
@@ -68,10 +68,15 @@ function Header(props) {
       }
   }
   const handleChange2 = (selectedOption2) => {
-    newSelOp2(selectedOption2.value)
+    newSelOp2(selectedOption2)
   }
 const search = () => {
-  history.push('/SearchOut')
+  console.log("selOp1 "+selOp1.value);
+  console.log("selOp2 "+selOp2.value);
+  history.push({
+      pathname: '/SearchOut',
+      state: { category : selOp2.value, class: selOp1.value}}
+    );
 }
 
 const renderButtons=()=>{
@@ -81,6 +86,54 @@ const renderButtons=()=>{
        <a className="btn btn-theme btn-sm btn-min-block" href="/signUp">Register</a>
    </div>)}
   }
+
+  const searchSec=()=>{
+     return (
+       <section className="search-sec">
+<div className="container">
+<form action="#" method="post" noValidate="noValidate">
+   <div className="row">
+       <div className="col-lg-12">
+           <div className="row">
+               <div className="col-lg-4 col-md-4 col-sm-12 p-0">
+               <Select
+onChange={handleChange1}
+defaultValue={selOp1}
+id = "exampleFormControlSelect1"
+components={animatedComponents}
+placeholder="Select Category"
+name="colors"
+options={options1}
+className="form-control search-slt"
+classNamePrefix="select"
+/>
+               </div>
+               <div className="col-lg-4 col-md-4 col-sm-12 p-0">
+               <Select
+onChange={handleChange2}
+defaultValue={selOp2}
+isDisabled = {isDisabled}
+id = "exampleFormControlSelect2"
+components={animatedComponents}
+placeholder="Select Category"
+name="colors"
+options={options2}
+className="form-control search-slt"
+classNamePrefix="select"
+/>
+
+               </div>
+               <div className="col-lg-3 col-md-3 col-sm-12 p-0">
+                   <button type="button" className="btn btn-danger wrn-btn"onClick={search}>Search</button>
+               </div>
+           </div>
+       </div>
+   </div>
+</form>
+</div>
+</section>
+   )
+    }
 
   return (
     <header id="header">
@@ -100,49 +153,7 @@ const renderButtons=()=>{
                         {renderButtons()}
                     </div>
                 </div>
-                <section className="search-sec">
-    <div className="container">
-        <form action="#" method="post" noValidate="noValidate">
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="row">
-                        <div className="col-lg-4 col-md-4 col-sm-12 p-0">
-                        <Select
-        onChange={handleChange1}
-        defaultValue={selOp1}
-        id = "exampleFormControlSelect1"
-        components={animatedComponents}
-        placeholder="Select Category"
-        name="colors"
-        options={options1}
-        className="form-control search-slt"
-        classNamePrefix="select"
-        />
-                        </div>
-                        <div className="col-lg-4 col-md-4 col-sm-12 p-0">
-                        <Select
-        onChange={handleChange2}
-        defaultValue={selOp2}
-        isDisabled = {isDisabled}
-        id = "exampleFormControlSelect2"
-        components={animatedComponents}
-        placeholder="Select Category"
-        name="colors"
-        options={options2}
-        className="form-control search-slt"
-        classNamePrefix="select"
-        />
-
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <button type="button" className="btn btn-danger wrn-btn"onClick={search}>Search</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    </section>
+              {searchSec()}
             </div>
             <div className="carousel-item">
                 <img src="https://pbs.twimg.com/media/EGHYvtkUcAAuc8T?format=jpg&name=large" className="d-block w-100" alt="..."/>
@@ -154,49 +165,7 @@ const renderButtons=()=>{
                         {renderButtons()}
                     </div>
                 </div>
-                <section className="search-sec">
-    <div className="container">
-        <form action="#" method="post" noValidate="noValidate">
-            <div className="row">
-                <div className="col-lg-12">
-                <div className="row">
-                    <div className="col-lg-4 col-md-4 col-sm-12 p-0">
-                    <Select
-    onChange={handleChange1}
-    defaultValue={selOp1}
-    id = "exampleFormControlSelect1"
-    components={animatedComponents}
-    placeholder="Select Category"
-    name="colors"
-    options={options1}
-    className="form-control search-slt"
-    classNamePrefix="select"
-    />
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 p-0">
-                    <Select
-    onChange={handleChange2}
-    defaultValue={selOp2}
-    isDisabled = {isDisabled}
-    id = "exampleFormControlSelect2"
-    components={animatedComponents}
-    placeholder="Select Category"
-    name="colors"
-    options={options2}
-    className="form-control search-slt"
-    classNamePrefix="select"
-    />
-
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-12 p-0">
-                        <button type="button" className="btn btn-danger wrn-btn" onClick={search}>Search</button>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    </section>
+                {searchSec()}
             </div>
             <div className="carousel-item">
                 <img src="https://pbs.twimg.com/media/EGHYvtjU0AAO8w1?format=jpg&name=large" className="d-block w-100" alt="..."/>
@@ -208,45 +177,7 @@ const renderButtons=()=>{
                         {renderButtons()}
                     </div>
                 </div>
-                <section className="search-sec">
-                <div className="container">
-                <form action="#" method="post" noValidate="noValidate">
-                <div className="row">
-                    <div className="col-lg-4 col-md-4 col-sm-12 p-0">
-                    <Select
-    onChange={handleChange1}
-    defaultValue={selOp1}
-    id = "exampleFormControlSelect1"
-    components={animatedComponents}
-    placeholder="Select Category"
-    name="colors"
-    options={options1}
-    className="form-control search-slt"
-    classNamePrefix="select"
-    />
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 p-0">
-                    <Select
-    onChange={handleChange2}
-    defaultValue={selOp2}
-    isDisabled = {isDisabled}
-    id = "exampleFormControlSelect2"
-    components={animatedComponents}
-    placeholder="Select Category"
-    name="colors"
-    options={options2}
-    className="form-control search-slt"
-    classNamePrefix="select"
-    />
-
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <button type="button" className="btn btn-danger wrn-btn" onClick={search}>Search</button>
-                    </div>
-                </div>
-                </form>
-                </div>
-                </section>
+                {searchSec()}
             </div>
         </div>
         <a className="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">

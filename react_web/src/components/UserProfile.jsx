@@ -112,6 +112,7 @@ handlePictureSelected(event) {
 					for(let i=0;i<it.length;i++){
 					 	found = this.props.item.items.find(element => element._id === it[i]);
 						g[i] = found;
+						g[i].stare = true;
 					}
 					console.log(g);
 
@@ -185,12 +186,15 @@ handlePictureSelected(event) {
 	onChange = e => {
 				this.setState({ [e.target.name]: e.target.value });
 			};
-	viewShopPage=(shopObject)=>{
-		var index = this.state.shopObjects.indexOf(shopObject);
-   		 if (index > -1) {
-				 history.push('/ViewPage')
-			 }
-    }
+			viewShopPage=(shopObject)=>{
+				console.log("viewShopPage...");
+				console.log("id" + shopObject._id);
+
+			history.push({
+					pathname: '/ViewPage',
+					state: { shop : shopObject, auth: this.props.auth }}
+				);
+			}
 		addToCart=(shopObjects)=>{
 			console.log("addToCart...");
 			console.log("id" + shopObjects._id);
@@ -400,7 +404,9 @@ renderPreview() {
 	const mapStateToProps = state => ({
 		user: state.auth.user,
 		token : state.auth.token,
-		item: state.item
+		item: state.item,
+		auth: state.auth
+
 	});
 
 	export default connect(

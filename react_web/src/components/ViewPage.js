@@ -288,17 +288,17 @@ class ViewPage extends Component {
             <span className="color blue"></span>
           </h5>
 
-          { !history.location.state.shop.cart ?   <div className="action">
+        { history.location.state.auth.isAuthenticated ? !history.location.state.shop.cart ?   <div className="action">
               <button className="add-to-cart btn btn-default"
                onClick={()=>this.addToCart(history.location.state.shop)}  >
                <FaShoppingCart className="pb-1" size="25"/>add to cart</button>
-            </div> : null }
-          {this.renderButtons()}
+            </div> : null : null }
+          { history.location.state.auth.isAuthenticated ? this.renderButtons() : null }
 
         </div>
       </div>
     </div>
-    <section className="p-3">
+    { history.location.state.auth.isAuthenticated ? <section className="p-3">
   <div className="container">
     <div className="row ">
       <div className="col-md-3 border text-center">
@@ -397,7 +397,7 @@ class ViewPage extends Component {
     </div>
 
   </div>
-  </section>
+  </section> : null }
 
   <div className="container">
   <div className="row justify-content-center">

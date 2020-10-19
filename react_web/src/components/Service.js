@@ -97,10 +97,9 @@ class Service extends Component {
           console.log("viewShopPage...");
           console.log("id" + shopObject._id);
 
-console.log(history);
         history.push({
             pathname: '/ViewPage',
-            state: { shop : shopObject }}
+            state: { shop : shopObject, auth: this.props.auth }}
           );
         }
 
@@ -228,11 +227,11 @@ console.log(g);
   <div className="col-md-10">
   <CardDeck >
 
-  <ElementHome key={shopObject.id} shopObject={shopObject} onClick={this.viewShopPage}
+  <ElementHome key={shopObject.id} shopObject={shopObject} onClick={this.viewShopPage} auth={this.props.auth}
           isStarred={shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
 
   {it.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
-    <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage}
+    <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage} auth={this.props.auth}
           isStarred={shopObject1.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}
 
@@ -255,7 +254,8 @@ Service.propTypes = {
 const mapStateToProps = state => ({
   user: state.auth.user,
   token : state.auth.token,
-  item: state.item
+  item: state.item,
+  auth: state.auth
 });
 
 export default connect(
