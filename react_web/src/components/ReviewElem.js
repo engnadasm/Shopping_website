@@ -14,7 +14,7 @@ super();
 
 render(){
   return (
-    <div key={this.props.shopObject.id} className="col-md-4">
+    <div key={this.props.shopObject._id} className="col-md-4">
     <div className="block-text rel zmin">
   <div className="mark">My rating:
   <span className="rating-input">
@@ -30,12 +30,12 @@ render(){
       </div>
       </span>
 </div>
-    <p>{this.props.shopObject.description}</p>
+    <p>{this.props.shopObject.text}</p>
   <ins className="ab zmin sprite sprite-i-triangle block"></ins>
   </div>
 <div className="person-text rel">
-        <img src={this.props.shopObject.image} className="avatar" alt="Avatar"/>
-<a title="" href="#name">{this.props.shopObject.title}</a>
+        <img src={this.props.shopObject.src} className="avatar" alt="Avatar"/>
+<a title="" href="#name">{this.props.shopObject.name}</a>
 </div>
     </div>
   )

@@ -24,69 +24,7 @@ class Service extends Component {
 
               this.state = {
                 count : 0,
-                shopObjects : [
-                          {id:1,
-                          image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                          title:'Title1',
-                          rating:3,
-                          price:'5 $',
-                          stare : false, class : "Men" , category : 'Shoes'
-                          },
-                          {id:2,
-                           image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                          title:'Title2',
-                          rating:4,
-                          price:'6 $',
-                          stare : false, class : "Men" , category : 'Shoes'
 
-                          },
-                          {id:3,
-                           image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                           title:'Title3',
-                           rating:2,
-                          price:'7 $',
-                          stare : false, class : "Ladies" , category : 'Shoes'
-
-                          },
-                          {id:4,
-                           image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                           title:'Titl4',
-                           rating:2,
-                          price:'8 $',
-                          stare : false, class : "Ladies" , category : 'Shoes'
-
-                        },
-                          {id:5,
-                           image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                          title:'9 $',
-                          rating:4,
-                          price:'price5',
-                          stare : false, class : "Ladies" , category : 'Shoes'
-
-                          },
-                          {id:6,
-                           image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                           title:'Title6',
-                           rating:2,
-                          price:'10 $',
-                          stare : false, class : "Ladies" , category : 'Tops'
-
-                        },
-                        {id:7,
-                         image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                         title:'Title7',
-                         rating:2,
-                        price:'11 $',
-                        stare : false, class : "Ladies" , category : 'Tops'
-
-                      },{id:8,
-                       image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-                       title:'Title8',
-                       rating:3,
-                      price:'12 $',
-                      stare : false, class : "Ladies" , category : 'Tops'
-
-                      }]
               }
               this.handleNext = this.handleNext.bind(this);
               this.addItem = this.addItem.bind(this);
@@ -184,7 +122,7 @@ class Service extends Component {
           history.push('/Cart')
         }
   handleNext=()=>{
-         if(this.state.count >= (this.state.shopObjects.length / 3 - 1)){
+         if(this.state.count >= (this.props.item.items.length / 3 - 1)){
             this.setState({count : 0})
           }
           else if(  this.state.count >= 0){
@@ -221,7 +159,7 @@ console.log(g);
 
   return (
     <Carousel className = "p-3"onSelect={this.handleNext} onClick={this.handleNext}id="shoppingList" >
-{it.slice(0,3).map(shopObject =>
+{it.slice(0,Math.ceil(it.length / 3)).map(shopObject =>
   <Carousel.Item key={shopObject._id}>
   <div className="row d-flex justify-content-center">
   <div className="col-md-10">
@@ -230,7 +168,7 @@ console.log(g);
   <ElementHome key={shopObject.id} shopObject={shopObject} onClick={this.viewShopPage} auth={this.props.auth}
           isStarred={shopObject.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
 
-  {it.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
+  {it.slice(Math.ceil(it.length / 3) + this.state.count * 2,(this.state.count + 1) * 2 + Math.ceil(it.length / 3)).map(shopObject1 =>
     <ElementHome key={shopObject1._id} shopObject={shopObject1} onClick={this.viewShopPage} auth={this.props.auth}
           isStarred={shopObject1.stare} onStare={this.addItem} onRemove={this.removeItem} addCart={this.addToCart}/>
   )}

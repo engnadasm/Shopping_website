@@ -51,8 +51,17 @@ const ItemSchema = new Schema({
     default: false
   },
   reviews:[{
-        text:String,
-        postedBy:{type:ObjectId,ref:"user"}
+        text:{
+          type: String,
+          default: "none"
+        },
+        postedBy:{type:ObjectId,ref:"user"},
+        name:String,
+        rating:Number,
+        src:{
+          type: String,
+          default: "http://simpleicon.com/wp-content/uploads/account.png"
+        }
     }],
   postedBy:{
        type:ObjectId,

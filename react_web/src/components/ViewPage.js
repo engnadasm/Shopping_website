@@ -28,73 +28,10 @@ class ViewPage extends Component {
         super()
         this.state = {
           count : 0,
-          shopObjects : [
-                    {id:1,
-                    image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                    title:'Title1',
-                    rating:3,
-                    price:'5 $',
-                    stare : false, class : "Men" , category : 'Shoes'
-                    },
-                    {id:2,
-                     image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                    title:'Title2',
-                    rating:4,
-                    price:'6 $',
-                    stare : false, class : "Men" , category : 'Shoes'
-
-                    },
-                    {id:3,
-                     image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                     title:'Title3',
-                     rating:2,
-                    price:'7 $',
-                    stare : false, class : "Ladies" , category : 'Shoes'
-
-                    },
-                    {id:4,
-                     image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                     title:'Titl4',
-                     rating:2,
-                    price:'8 $',
-                    stare : false, class : "Ladies" , category : 'Shoes'
-
-                  },
-                    {id:5,
-                     image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                    title:'9 $',
-                    rating:4,
-                    price:'price5',
-                    stare : false, class : "Ladies" , category : 'Shoes'
-
-                    },
-                    {id:6,
-                     image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                     title:'Title6',
-                     rating:2,
-                    price:'10 $',
-                    stare : false, class : "Ladies" , category : 'Tops'
-
-                  },
-                  {id:7,
-                   image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                   title:'Title7',
-                   rating:2,
-                  price:'11 $',
-                  stare : false, class : "Ladies" , category : 'Tops'
-
-                },{id:8,
-                 image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',description:'description for review of user about product ^_^',
-                 title:'Title8',
-                 rating:3,
-                price:'12 $',
-                stare : false, class : "Ladies" , category : 'Tops'
-
-                }]
         }
 }
     handleNext=()=>{
-           if(this.state.count >= (this.state.shopObjects.length / 3 - 1)){
+           if(this.state.count >= (Math.ceil(history.location.state.shop.reviews.length / 3 )- 1)){
               this.setState({count : 0})
             }
             else if(  this.state.count >= 0){
@@ -390,7 +327,7 @@ class ViewPage extends Component {
       <div className="col-md-4 border text-center">
           <div className="card-body">
           <AiTwotoneEdit className="fa fa-pencil-square fa-3x text-success" size={40}/>
-              <a href="#REVIEW"><h4>Write Your Views</h4></a>
+              <a href=""><h4>Write Your Views</h4></a>
               <small>share your experience/views about this product</small>
           </div>
       </div>
@@ -399,20 +336,19 @@ class ViewPage extends Component {
   </div>
   </section> : null }
 
-  <div className="container">
-  <div className="row justify-content-center">
   <h2>Some Reviews</h2>
-  <Carousel className = "pt-1 pb-3"onSelect={this.handleNext} onClick={this.handleNext} >
-  {this.state.shopObjects.slice(0,3).map(shopObject =>
-  <Carousel.Item key={shopObject.id + 20}>
+  <Carousel className = "pb-3"onSelect={this.handleNext} onClick={this.handleNext} >
+  {history.location.state.shop.reviews.slice(0,Math.ceil(history.location.state.shop.reviews.length / 3 )).map(shopObject =>
+  <Carousel.Item key={shopObject._id}>
   <div className="row d-flex justify-content-center">
   <div className="col-md-10">
   <CardDeck >
 
   <ReviewElem key={shopObject.id} shopObject={shopObject} />
 
-  {this.state.shopObjects.slice(3 + this.state.count * 2,(this.state.count + 1) * 2 + 3).map(shopObject1 =>
-  <ReviewElem key={shopObject1.id} shopObject={shopObject1}/>
+  {history.location.state.shop.reviews.slice(Math.ceil(history.location.state.shop.reviews.length / 3 ) + this.state.count * 2,
+    (this.state.count + 1) * 2 + Math.ceil(history.location.state.shop.reviews.length / 3 )).map(shopObject1 =>
+  <ReviewElem key={shopObject1._id} shopObject={shopObject1}/>
   )}
 
   </CardDeck>
@@ -422,8 +358,7 @@ class ViewPage extends Component {
   )}
 
   </Carousel>
-  </div>
-  </div>
+
 
   </div>
 

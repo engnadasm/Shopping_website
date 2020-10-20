@@ -80,8 +80,10 @@ router.delete('/:id', async (req, res) => {
 router.put('/reviews',async (req,res)=>{
     const review = {
         text:req.body.text,
-      //  postedBy:req.user._id
-    }
+        postedBy:req.body.id,
+        name:req.body.name,
+        rating:req.body.rating
+          }
     Item.findByIdAndUpdate(req.body.postId,{
         $push:{reviews:review}
     },{
