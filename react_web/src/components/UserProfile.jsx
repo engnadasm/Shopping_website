@@ -24,6 +24,7 @@ constructor(){
         confirmNewPass:"",
         checkMessage: "",
         matching: "",
+				matching2: "",
         shopObjects: [],
 				picture: false,
 		 	src: false,
@@ -127,7 +128,36 @@ handlePictureSelected(event) {
 		this.setState({data : "Password"});
 	}
 	handleCurrentPass=(e)=>{
+		const bcrypt = require('bcryptjs');
+
 		this.setState({currentPass: e.target.value});
+
+		if(this.state.currentPass !== null) {
+		const config = {
+			headers: {
+				"Content-Type":"application/json",
+				 "x-auth-token": this.props.token,
+				 "user": this.props.user,
+			 }
+		};
+
+		axios
+		 .get('/api/auth/userPass', config)
+		 .then(response =>{
+			 console.log(response);
+			 bcrypt.compare(this.state.currentPass, response.data.password)
+         .then(isMatch => {
+					 if(!isMatch){
+						 this.setState({matching2: "The current passwords is not correct."});
+					 } else {
+						 this.setState({matching2: ""});
+					 }
+					 console.log(isMatch);
+				 })
+		 }
+		 )
+		 .catch(error => console.log(error));
+	 }
 	}
 	handleNewPass=(e)=>{
 		this.setState({newPass: e.target.value});
@@ -140,17 +170,29 @@ handlePictureSelected(event) {
 		        this.setState({matching: "The two passwords are not matched."});
 		    }
 	}
-	handleNext=()=>{
-				 if(this.state.count >= (this.state.shopObjects.length / 3 - 1)){
-						this.setState({count : 0})
-					}
-					else if(  this.state.count >= 0){
-				 this.setState({count:  this.state.count + 1})
-					}
-	}
 	handleSubmit=()=> {
 	    if(this.state.newPass === this.state.confirmNewPass) {
-	        this.setState({checkMessage: "Your password have changed."});
+				if(this.state.matching2 !== "The current passwords is not correct."){
+					const config = {
+						headers: {
+							"Content-Type":"application/json",
+							 "x-auth-token": this.props.token,
+							 "user": this.props.user,
+						 }
+					};
+					const password = this.state.newPass;
+					const body = JSON.stringify({password});
+					axios
+					 .put('/api/auth/new-password',body, config)
+					 .then(response =>{
+						 console.log(response);
+						 this.setState({checkMessage: "Your password have changed."});
+					 }
+					 )
+					 .catch(error => console.log(error));
+				} else {
+					this.setState({matching: "please,Check current passwords is correct."});
+				}
 	    } else {
 	        this.setState({checkMessage: "Some error occured during password change."});
 	    }
@@ -253,7 +295,10 @@ handlePictureSelected(event) {
 		return(	<div>
 				<h3>Change Password</h3>
 				<label htmlFor="currentPassword">Enter your current password</label>
-                <input type="password"id="currentPassword" className="form-control" placeholder="Old Password" onChange={this.handleCurrentPass} value={this.state.currentPass}></input>
+                <input type="password"id="currentPassword" className="form-control"
+								placeholder="Old Password" onChange={this.handleCurrentPass}
+								value={this.state.currentPass}></input>
+								<span style={{color : "red"}}>{this.state.matching2}</span>
                 <div className="col"><hr/></div>
 			    <label htmlFor="newPassword">Enter your new password</label>
                 <input type="password"id="newPassword" className="form-control" placeholder="New Password" minLength={6} pattern="(?=.*\d)(?=.*[a-z]).{6,}" onChange={this.handleNewPass} value={this.state.newPass}></input>

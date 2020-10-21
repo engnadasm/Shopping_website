@@ -21,69 +21,6 @@ class SearchOut extends Component {
   constructor(){
   super();
   this.state = {
-    shopObjects : [
-              {id:1,
-              image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-              title:'Title1',
-              rating:3,
-              price:'5 $',
-              stare : false, class : "Men" , category : 'Shoes'
-              },
-              {id:2,
-               image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-              title:'Title2',
-              rating:4,
-              price:'6 $',
-              stare : false, class : "Men" , category : 'Shoes'
-
-              },
-              {id:3,
-               image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-               title:'Title3',
-               rating:2,
-              price:'7 $',
-              stare : false, class : "Ladies" , category : 'Shoes'
-
-              },
-              {id:4,
-               image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-               title:'Titl4',
-               rating:2,
-              price:'8 $',
-              stare : false, class : "Ladies" , category : 'Shoes'
-
-            },
-              {id:5,
-               image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-              title:'9 $',
-              rating:4,
-              price:'price5',
-              stare : false, class : "Ladies" , category : 'Shoes'
-
-              },
-              {id:6,
-               image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-               title:'Title6',
-               rating:2,
-              price:'10 $',
-              stare : false, class : "Ladies" , category : 'Tops'
-
-            },
-            {id:7,
-             image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-             title:'Title7',
-             rating:2,
-            price:'11 $',
-            stare : false, class : "Ladies" , category : 'Tops'
-
-          },{id:8,
-           image:'https://cdn.pixabay.com/photo/2017/02/08/14/25/computer-2048983_960_720.jpg',
-           title:'Title8',
-           rating:3,
-          price:'12 $',
-          stare : false, class : "Ladies" , category : 'Tops'
-
-        }],
     options1 : [
                           { value: 'Ladies', label: 'Ladies' },
                           { value: 'Men', label: 'Men' },
@@ -92,14 +29,10 @@ class SearchOut extends Component {
 
                         ],
     options2:[
-                                      { value: 'Ladies', label: 'Ladies' },
-                                      { value: 'Men', label: 'Men' },
-                                      { value: 'Kids', label: 'Kids' },
                                       { value: 'All', label: 'All' }
 
                                     ],
-    page : 0,
-    isLoaded: false
+    fulterOPtion:"Latest items"
   }
 
         this.addItem = this.addItem.bind(this);
@@ -195,20 +128,6 @@ class SearchOut extends Component {
            state: { shop : shopObject, auth: this.props.auth }}
          );
        }
-
-    handlePrevious=()=>{
-      console.log("Previous-----------------------")
-      if(this.state.page > 0){
-        this.setState({page : this.state.page -1})
-      }
-    }
-    handleNext=()=>{
-      console.log("Next-----------------------")
-      if(this.state.shopObjects.length - 3 * (this.state.page + 1) > 0){
-        this.setState({page : this.state.page + 1})
-      }
-    }
-
    handleChange1 = (selectedOption1) => {
 
         if(selectedOption1.value === 'Ladies'){
@@ -245,6 +164,12 @@ class SearchOut extends Component {
         }
     }
    handleChange2 = (selectedOption2) => {
+    }
+
+    changOption=()=>{
+      var sel = document.getElementById('scripts');
+      this.setState({fulterOPtion:sel.value});
+      console.log( this.state.fulterOPtion );
     }
 
   render() {
@@ -301,6 +226,22 @@ class SearchOut extends Component {
       it[found].cart = true;
     }
     }
+
+    }
+    console.log(it);
+    if(this.state.fulterOPtion !== null){
+    console.log( this.state.fulterOPtion );
+    if(this.state.fulterOPtion === "Cheapest"){
+      it.sort(function(a,b) {
+      return a.price - b.price;
+      });
+  } else if (this.state.fulterOPtion === "Highest Rating") {
+    it.sort(function(a,b) {
+    return b.rating - a.rating;
+    });
+  } else{
+    it.reverse();
+  }
     console.log(it);
     }
 
@@ -314,7 +255,7 @@ class SearchOut extends Component {
   		<header className="card-header">
   			<a href="#collapse_1" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" className="">
   				<i className="icon-control fa fa-chevron-down"></i>
-  				<h6 className="title">Product Class</h6>
+  				<h6 className="title" style={{color:"black"}}>Product Class</h6>
   			</a>
   		</header>
   		<div className="filter-content collapse show" id="collapse_1" >
@@ -354,7 +295,7 @@ class SearchOut extends Component {
   		<header className="card-header">
   			<a href="#collapse_2" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" className="">
   				<i className="icon-control fa fa-chevron-down"></i>
-  				<h6 className="title">Category </h6>
+  				<h6 className="title" style={{color:"black"}}>Category </h6>
   			</a>
   		</header>
   		<div className="filter-content collapse show" id="collapse_2" >
@@ -369,61 +310,6 @@ class SearchOut extends Component {
   	</div>
   		</div>
   	</article>
-  	<article className="filter-group">
-  		<header className="card-header">
-  			<a href="#collapse_3" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" className="">
-  				<i className="icon-control fa fa-chevron-down"></i>
-  				<h6 className="title">Price range </h6>
-  			</a>
-  		</header>
-  		<div className="filter-content collapse show" id="collapse_3" >
-  			<div className="card-body">
-  				<input type="range" className="custom-range" min="0" max="100" name=""/>
-  				<div className="form-row">
-  				<div className="form-group col-md-6">
-  				  <label>Min</label>
-  				  <input className="form-control" placeholder="$0" type="number"/>
-  				</div>
-  				<div className="form-group text-right col-md-6">
-  				  <label>Max</label>
-  				  <input className="form-control" placeholder="$1,0000" type="number"/>
-  				</div>
-  				</div>
-  				<button className="btn btn-block btn-primary">Apply</button>
-  			</div>
-  		</div>
-  	</article>
-  	<article className="filter-group">
-  		<header className="card-header">
-  			<a href="#collapse_4" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" className="">
-  				<i className="icon-control fa fa-chevron-down"></i>
-  				<h6 className="title">Sizes </h6>
-  			</a>
-  		</header>
-  		<div className="filter-content collapse show" id="collapse_4" >
-  			<div className="card-body">
-  			  <label className="checkbox-btn">
-  			    <input type="checkbox"/>
-  			    <span className="btn btn-light"> XS </span>
-  			  </label>
-
-  			  <label className="checkbox-btn">
-  			    <input type="checkbox"/>
-  			    <span className="btn btn-light"> SM </span>
-  			  </label>
-
-  			  <label className="checkbox-btn">
-  			    <input type="checkbox"/>
-  			    <span className="btn btn-light"> LG </span>
-  			  </label>
-
-  			  <label className="checkbox-btn">
-  			    <input type="checkbox"/>
-  			    <span className="btn btn-light"> XXL </span>
-  			  </label>
-  		</div>
-  		</div>
-  	</article>
 
   </div>
 
@@ -433,7 +319,7 @@ class SearchOut extends Component {
   <header className="border-bottom mb-4 pb-3">
   		<div className="form-inline">
   			<span className="mr-md-auto">{it.length} Items found </span>
-  			<select className="mr-2 form-control">
+  			<select className="mr-2 form-control" onChange={this.changOption} id="scripts">
   				<option>Latest items</option>
   				<option>Highest Rating</option>
   				<option>Cheapest</option>
@@ -448,17 +334,6 @@ class SearchOut extends Component {
   )}
 
   </div>
-
-  <nav className="mt-4" aria-label="Page navigation sample">
-    <ul className="pagination">
-      <li className="page-item disabled"><a className="page-link" href="#previous">Previous</a></li>
-      <li className="page-item active"><a className="page-link" href="#nav1">1</a></li>
-      <li className="page-item"><a className="page-link" href="#nav2">2</a></li>
-      <li className="page-item"><a className="page-link" href="#nav3">3</a></li>
-      <li className="page-item"><a className="page-link" href="#next">Next</a></li>
-    </ul>
-  </nav>
-
   	</main>
 
   	</div>

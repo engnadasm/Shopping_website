@@ -59,6 +59,12 @@ router.get('/user', auth, (req, res) => {
     .then(user => res.json(user));
 });
 
+router.get('/userPass', auth, (req, res) => {
+  User.findById(req.user.id)
+    .select('password')
+    .then(user => res.json(user));
+});
+
 router.put('/favorite',auth,(req,res)=>{
   console.log(req.body);
     User.findByIdAndUpdate(req.user.id,{

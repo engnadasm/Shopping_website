@@ -223,6 +223,9 @@ console.log(body);
         }
     }
     }
+    const allPic = history.location.state.shop.Pic;
+    var res = allPic.split(" ");
+console.log(res);
     return (
       <div className="container">
   <div className="card">
@@ -232,17 +235,17 @@ console.log(body);
 
           <div className="preview-pic tab-content">
             <div className="tab-pane active" id="pic-1"><img alt="imagePic" src={history.location.state.shop.mainPic} /></div>
-            <div className="tab-pane" id="pic-2"><img alt="imagePic" src={history.location.state.shop.mainPic} /></div>
-            <div className="tab-pane" id="pic-3"><img alt="imagePic" src="http://placekitten.com/400/252" /></div>
-            <div className="tab-pane" id="pic-4"><img alt="imagePic" src={history.location.state.shop.mainPic} /></div>
-            <div className="tab-pane" id="pic-5"><img alt="imagePic" src="http://placekitten.com/400/252" /></div>
+            <div className="tab-pane" id="pic-2"><img alt="imagePic" src={res[1]} /></div>
+            <div className="tab-pane" id="pic-3"><img alt="imagePic" src={res[2]} /></div>
+            <div className="tab-pane" id="pic-4"><img alt="imagePic" src={res[3]} /></div>
+            <div className="tab-pane" id="pic-5"><img alt="imagePic" src={res[4]}/></div>
           </div>
           <ul className="preview-thumbnail nav nav-tabs">
             <li className="active"><a href="#pic1" data-target="#pic-1" data-toggle="tab"><img alt="imagePic" src={history.location.state.shop.mainPic} /></a></li>
-            <li><a href="#pic2" data-target="#pic-2" data-toggle="tab"><img alt="imagePic" src={history.location.state.shop.mainPic} /></a></li>
-            <li><a href="#pic3"data-target="#pic-3" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
-            <li><a href="#pic4" data-target="#pic-4" data-toggle="tab"><img alt="imagePic" src={history.location.state.shop.mainPic} /></a></li>
-            <li><a href="#pic5" data-target="#pic-5" data-toggle="tab"><img alt="imagePic" src="http://placekitten.com/200/126" /></a></li>
+            <li><a href="#pic2" data-target="#pic-2" data-toggle="tab"><img alt="imagePic" src={res[1]}/></a></li>
+            <li><a href="#pic3"data-target="#pic-3" data-toggle="tab"><img alt="imagePic" src={res[2]} /></a></li>
+            <li><a href="#pic4" data-target="#pic-4" data-toggle="tab"><img alt="imagePic" src={res[3]} /></a></li>
+            <li><a href="#pic5" data-target="#pic-5" data-toggle="tab"><img alt="imagePic" src={res[4]} /></a></li>
           </ul>
 
         </div>

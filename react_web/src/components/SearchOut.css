@@ -85,6 +85,32 @@
                 padding-left: 5px;
                 font-weight: 300;
             }
+
+            .icon-control {
+                margin-top: 5px;
+                float: right;
+                font-size: 80%;
+            }
+
+            .btn-light {
+                background-color: #fff;
+                border-color: #e4e4e4;
+            }
+
+            .list-menu {
+                list-style: none;
+                margin: 0;
+                padding-left: 0;
+            }
+            .list-menu a {
+                color: white;
+            }
+
+            [class*='card-product'] a.title {
+                color: #212529;
+                display: block;
+            }
+
            .add-to-cart {
                 position: absolute;
                 right: 0;

@@ -163,7 +163,8 @@ class ItemModal extends Component {
       class: this.state.class,
       category: this.state.category,
       quantity: this.state.quantity,
-      mainPic: this.state.src
+      mainPic: this.state.src,
+      Pic: this.state.pic
     };
 
     // Add item via addItem action
@@ -228,7 +229,7 @@ class ItemModal extends Component {
               classNamePrefix="select"
               />
                 <Label for="itemCategory">Item category</Label>
-                
+
                 <Select
 onChange={this.handleChange2}
 id = "exampleFormControlSelect2"
