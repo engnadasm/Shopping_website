@@ -132,8 +132,6 @@ class Service extends Component {
 
   render(){
     const it = this.props.item.items;
-let g = [];
-
 if(this.props.user != null){
 console.log(this.props.user);
 
@@ -154,7 +152,6 @@ for(let i=0;i<favorite.length;i++){
   it[found].cart = true;
 }
 }
-console.log(g);
 }
 
   return (

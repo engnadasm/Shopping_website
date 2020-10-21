@@ -3,7 +3,7 @@ import './ViewPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import { FaTags, FaTimes,FaShoppingCart } from "react-icons/fa";
-import { AiTwotoneHeart,AiTwotoneEdit } from "react-icons/ai";
+import { AiTwotoneHeart,AiTwotoneEdit,AiFillFileText } from "react-icons/ai";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import StarRatings from 'react-star-ratings';
@@ -28,6 +28,8 @@ class ViewPage extends Component {
         super()
         this.state = {
           count : 0,
+          rating : 0,
+          text : "none"
         }
 }
     handleNext=()=>{
@@ -164,8 +166,63 @@ class ViewPage extends Component {
 
         history.push('/Cart')
       }
+
+      submitReview=()=>{
+        console.log(this.props.user);
+        const name = this.props.user.userName;
+        const id = this.props.user._id;
+        const src = this.props.user.src;
+        const postId = history.location.state.shop._id;
+        const rating = this.state.rating;
+        const text = this.state.text;
+        // Headers
+        const config = {
+          headers: {
+            "Content-Type":"application/json"
+           }
+        };
+
+        // Request body
+        const body = JSON.stringify({name,id,src,postId,rating,text});
+console.log(body);
+        axios
+         .put('/api/items/reviews',body, config)
+         .then(response =>{
+           console.log(response);
+           history.push({
+               pathname: '/ViewPage',
+               state: { shop :  response.data, auth:history.location.state.auth}}
+             );
+            document.getElementById('modalPoll-1').setAttribute('style', 'display: none');
+         }
+         )
+         .catch(error => console.log(error));
+
+      }
+
+      changeRating=( newRating, name ) =>{
+      this.setState({
+        rating: newRating
+      });
+    }
+    onChange = e => {
+          this.setState({ [e.target.name]: e.target.value });
+    };
   render() {
     console.log(history);
+    const all = history.location.state.shop.reviews;
+    let g = []
+    if(history.location.state.auth.isAuthenticated){
+      if(all.length !== 0){
+        let j = 0;
+        for(let i=0;i<all.length;i++){
+          if(all[i].postedBy === this.props.user._id || all[i].postedBy._id === this.props.user._id) {
+            g[j] = all[i];
+            j++;
+          }
+        }
+    }
+    }
     return (
       <div className="container">
   <div className="card">
@@ -235,104 +292,111 @@ class ViewPage extends Component {
         </div>
       </div>
     </div>
+
     { history.location.state.auth.isAuthenticated ? <section className="p-3">
   <div className="container">
     <div className="row ">
-      <div className="col-md-3 border text-center">
+      <div className="col-md-6 border text-center">
           <div className="card-body">
-              <h1 className="text-danger">4.5</h1>
-              <div className="sub-row text-warning">
-              <div className="justify-content-center">
+              <h1 className="text-danger">YOUR REVIEWs</h1>
 
-                 <StarRatings
-                  rating={history.location.state.shop.rating}
-                  starRatedColor="yellow"
-                  starDimension="23px"
-                  numberOfStars={5}
-                  starSpacing="1px"
-                  name='rating'/>
-                  </div>
+                                {g.map(myreview =>
+                                  <div key={myreview._id}>
+                                  <div className="block-text rel zmin">
+                                <div className="mark">My rating:
+                                <span className="rating-input">
+                                <div className="float-right">
+                                   <StarRatings
+                                    rating={myreview.rating}
+                                    starRatedColor="yellow"
+                                    starDimension="23px"
+                                    numberOfStars={5}
+                                    starSpacing="1px"
+                                    name='rating'/>
+                                    </div>
+                                    </span>
+                              </div>
+                                  <p>{myreview.text}</p>
                                 </div>
+                                  </div>
+                                )}
           </div>
       </div>
-      <div className="col-md-5 border">
+      <div className="col-md-6 border justify-content-center">
           <div className="card-body">
-              <div className="row">
-                  <div className="col-md-3">
-                      <h6>5 Stars</h6>
-                  </div>
-                  <div className="col-md-7 pt-1">
-                      <div className="progress">
-                            <div className="progress-bar bg-success" style={{width:'20%'}}></div>
-                          </div>
-                  </div>
-                  <div className="col-md-2">
-                      <h6>(1)</h6>
-                  </div>
+          <div className="row justify-content-center pb-3">
+        <button type="button" className="btn btn-primary text-center" data-toggle="modal"
+          data-target="#modalPoll-1"><AiTwotoneEdit
+          className="fa fa-pencil-square fa-3x text-success"
+          size={40}/><h4> Write Your Views </h4></button>
               </div>
-              <div className="row">
-                  <div className="col-md-3">
-                      <h6>4 Stars</h6>
-                  </div>
-                  <div className="col-md-7 pt-1">
-                      <div className="progress">
-                            <div className="progress-bar bg-success" style={{width:'20%'}}></div>
-                          </div>
-                  </div>
-                  <div className="col-md-2">
-                      <h6>(1)</h6>
-                  </div>
+              <div className="row justify-content-center">
+              <h6>share your experience/views about this product</h6>
               </div>
-              <div className="row">
-                  <div className="col-md-3">
-                      <h6>3 Stars</h6>
-                  </div>
-                  <div className="col-md-7 pt-1">
-                      <div className="progress">
-                            <div className="progress-bar bg-warning" style={{width:'20%'}}></div>
-                          </div>
-                  </div>
-                  <div className="col-md-2">
-                      <h6>(1)</h6>
-                  </div>
-              </div>
-              <div className="row">
-                  <div className="col-md-3">
-                      <h6>2 Stars</h6>
-                  </div>
-                  <div className="col-md-7 pt-1">
-                      <div className="progress">
-                            <div className="progress-bar bg-danger" style={{width:'20%'}}></div>
-                          </div>
-                  </div>
-                  <div className="col-md-2">
-                      <h6>(1)</h6>
-                  </div>
-              </div>
-              <div className="row">
-                  <div className="col-md-3">
-                      <h6>1 Star</h6>
-                  </div>
-                  <div className="col-md-7 pt-1">
-                      <div className="progress">
-                            <div className="progress-bar bg-danger" style={{width:'20%'}}></div>
-                          </div>
-                  </div>
-                  <div className="col-md-2">
-                      <h6>(1)</h6>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div className="col-md-4 border text-center">
-          <div className="card-body">
-          <AiTwotoneEdit className="fa fa-pencil-square fa-3x text-success" size={40}/>
-              <a href=""><h4>Write Your Views</h4></a>
-              <small>share your experience/views about this product</small>
           </div>
       </div>
     </div>
 
+  </div>
+  <div className="modal fade right" id="modalPoll-1" tabindex="-1"
+  role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="false">
+    <div className="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+      <div className="modal-content">
+        <div className="modal-header" style={{background:"blue"}}>
+          <p className="heading lead">Write Your Views
+          </p>
+
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" className="white-text">×</span>
+          </button>
+        </div>
+
+        <div className="modal-body">
+          <div className="text-center">
+          <AiFillFileText size={80} style={{color:"blue"}}/>
+            <p>
+              <strong>Your opinion matters</strong>
+            </p>
+            <p>Give us your feedback.
+            </p>
+          </div>
+
+          <hr/>
+
+          <p className="text-center">
+            <strong>Your rating</strong>
+          </p>
+<div className="pl-5 ml-5">
+          <StarRatings className="justify-content-center"
+           rating={this.state.rating}
+           changeRating={this.changeRating}
+           starRatedColor="yellow"
+           starDimension="50px"
+           numberOfStars={5}
+           starSpacing="1px"
+           name='rating'/>
+</div>
+          <p className="text-center">
+            <strong>share your experience/views about this product</strong>
+          </p>
+          <div className="md-form">
+            <textarea type="text" id="form79textarea" name="text"
+            onChange={this.onChange}
+            className="md-textarea form-control" rows="3"></textarea>
+          </div>
+
+        </div>
+
+        <div className="modal-footer justify-content-center">
+          <a type="button" className="btn btn-primary waves-effect waves-light"
+           onClick={this.submitReview.bind(this)}>Submit
+            <i className="fa fa-paper-plane ml-1"></i>
+          </a>
+          <a type="button" className="btn btn-outline-primary waves-effect" id="forClose" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
   </div>
   </section> : null }
 
